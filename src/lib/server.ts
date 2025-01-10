@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // const baseURL = "http://localhost:3000";
-const baseURL = "https://qr-code-generator-nx2c.onrender.com";
+const baseURL = import.meta.env.VITE_BASE_URL;
 
 export const server = axios.create({
 	baseURL,
