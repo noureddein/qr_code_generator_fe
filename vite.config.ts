@@ -6,6 +6,7 @@ import path from "node:path";
 // https://vite.dev/config/
 export default defineConfig({
 	plugins: [TanStackRouterVite(), react()],
+	base: "/",
 	resolve: {
 		alias: {
 			"@components": path.resolve(__dirname, "./src/components"),
@@ -17,7 +18,7 @@ export default defineConfig({
 			"@store": path.resolve(__dirname, "./src/store"),
 		},
 	},
-	server: {
-		port: 5173,
-	},
+	// server: {
+	// 	port: 5173,
+	// },
 });
