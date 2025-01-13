@@ -1,9 +1,8 @@
-import Container from '@components/Container'
 import usePrivateServer from '@hooks/usePrivateServer'
 import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
 
-export const Route = createLazyFileRoute('/_authenticated/profile')({
+export const Route = createLazyFileRoute('/_wrapper/_authenticated/profile')({
   component: RouteComponent,
 })
 
@@ -19,5 +18,5 @@ function RouteComponent() {
     queryKey: ['profile'],
   })
   console.log({ profile: data })
-  return <Container>{JSON.stringify(data?.user)}</Container>
+  return <>{JSON.stringify(data?.user)}</>
 }

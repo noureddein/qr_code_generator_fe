@@ -13,254 +13,307 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as RegisterImport } from './routes/register'
-import { Route as LoginImport } from './routes/login'
-import { Route as AuthenticatedImport } from './routes/_authenticated'
-import { Route as AuthenticatedIndexImport } from './routes/_authenticated/index'
-import { Route as AuthenticatedVcardImport } from './routes/_authenticated/vcard'
-import { Route as AuthenticatedTextImport } from './routes/_authenticated/text'
-import { Route as AuthenticatedMyCodesImport } from './routes/_authenticated/my-codes'
-import { Route as AuthenticatedEmailImport } from './routes/_authenticated/email'
+import { Route as WrapperImport } from './routes/_wrapper'
+import { Route as IdImport } from './routes/$id'
+import { Route as WrapperRegisterImport } from './routes/_wrapper/register'
+import { Route as WrapperLoginImport } from './routes/_wrapper/login'
+import { Route as WrapperAuthenticatedImport } from './routes/_wrapper/_authenticated'
+import { Route as WrapperAuthenticatedVcardImport } from './routes/_wrapper/_authenticated/vcard'
+import { Route as WrapperAuthenticatedUrlImport } from './routes/_wrapper/_authenticated/url'
+import { Route as WrapperAuthenticatedTextImport } from './routes/_wrapper/_authenticated/text'
+import { Route as WrapperAuthenticatedMyCodesImport } from './routes/_wrapper/_authenticated/my-codes'
+import { Route as WrapperAuthenticatedEmailImport } from './routes/_wrapper/_authenticated/email'
 
 // Create Virtual Routes
 
-const AuthenticatedProfileLazyImport = createFileRoute(
-  '/_authenticated/profile',
+const WrapperAuthenticatedProfileLazyImport = createFileRoute(
+  '/_wrapper/_authenticated/profile',
 )()
 
 // Create/Update Routes
 
-const RegisterRoute = RegisterImport.update({
+const WrapperRoute = WrapperImport.update({
+  id: '/_wrapper',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const IdRoute = IdImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const WrapperRegisterRoute = WrapperRegisterImport.update({
   id: '/register',
   path: '/register',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => WrapperRoute,
 } as any)
 
-const LoginRoute = LoginImport.update({
+const WrapperLoginRoute = WrapperLoginImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => WrapperRoute,
 } as any)
 
-const AuthenticatedRoute = AuthenticatedImport.update({
+const WrapperAuthenticatedRoute = WrapperAuthenticatedImport.update({
   id: '/_authenticated',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => WrapperRoute,
 } as any)
 
-const AuthenticatedIndexRoute = AuthenticatedIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
+const WrapperAuthenticatedProfileLazyRoute =
+  WrapperAuthenticatedProfileLazyImport.update({
+    id: '/profile',
+    path: '/profile',
+    getParentRoute: () => WrapperAuthenticatedRoute,
+  } as any).lazy(() =>
+    import('./routes/_wrapper/_authenticated/profile.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
-const AuthenticatedProfileLazyRoute = AuthenticatedProfileLazyImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => AuthenticatedRoute,
-} as any).lazy(() =>
-  import('./routes/_authenticated/profile.lazy').then((d) => d.Route),
-)
-
-const AuthenticatedVcardRoute = AuthenticatedVcardImport.update({
+const WrapperAuthenticatedVcardRoute = WrapperAuthenticatedVcardImport.update({
   id: '/vcard',
   path: '/vcard',
-  getParentRoute: () => AuthenticatedRoute,
+  getParentRoute: () => WrapperAuthenticatedRoute,
 } as any)
 
-const AuthenticatedTextRoute = AuthenticatedTextImport.update({
+const WrapperAuthenticatedUrlRoute = WrapperAuthenticatedUrlImport.update({
+  id: '/url',
+  path: '/url',
+  getParentRoute: () => WrapperAuthenticatedRoute,
+} as any)
+
+const WrapperAuthenticatedTextRoute = WrapperAuthenticatedTextImport.update({
   id: '/text',
   path: '/text',
-  getParentRoute: () => AuthenticatedRoute,
+  getParentRoute: () => WrapperAuthenticatedRoute,
 } as any)
 
-const AuthenticatedMyCodesRoute = AuthenticatedMyCodesImport.update({
-  id: '/my-codes',
-  path: '/my-codes',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
+const WrapperAuthenticatedMyCodesRoute =
+  WrapperAuthenticatedMyCodesImport.update({
+    id: '/my-codes',
+    path: '/my-codes',
+    getParentRoute: () => WrapperAuthenticatedRoute,
+  } as any)
 
-const AuthenticatedEmailRoute = AuthenticatedEmailImport.update({
+const WrapperAuthenticatedEmailRoute = WrapperAuthenticatedEmailImport.update({
   id: '/email',
   path: '/email',
-  getParentRoute: () => AuthenticatedRoute,
+  getParentRoute: () => WrapperAuthenticatedRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_authenticated': {
-      id: '/_authenticated'
+    '/$id': {
+      id: '/$id'
+      path: '/$id'
+      fullPath: '/$id'
+      preLoaderRoute: typeof IdImport
+      parentRoute: typeof rootRoute
+    }
+    '/_wrapper': {
+      id: '/_wrapper'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof AuthenticatedImport
+      preLoaderRoute: typeof WrapperImport
       parentRoute: typeof rootRoute
     }
-    '/login': {
-      id: '/login'
+    '/_wrapper/_authenticated': {
+      id: '/_wrapper/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof WrapperAuthenticatedImport
+      parentRoute: typeof WrapperImport
+    }
+    '/_wrapper/login': {
+      id: '/_wrapper/login'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof WrapperLoginImport
+      parentRoute: typeof WrapperImport
     }
-    '/register': {
-      id: '/register'
+    '/_wrapper/register': {
+      id: '/_wrapper/register'
       path: '/register'
       fullPath: '/register'
-      preLoaderRoute: typeof RegisterImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof WrapperRegisterImport
+      parentRoute: typeof WrapperImport
     }
-    '/_authenticated/email': {
-      id: '/_authenticated/email'
+    '/_wrapper/_authenticated/email': {
+      id: '/_wrapper/_authenticated/email'
       path: '/email'
       fullPath: '/email'
-      preLoaderRoute: typeof AuthenticatedEmailImport
-      parentRoute: typeof AuthenticatedImport
+      preLoaderRoute: typeof WrapperAuthenticatedEmailImport
+      parentRoute: typeof WrapperAuthenticatedImport
     }
-    '/_authenticated/my-codes': {
-      id: '/_authenticated/my-codes'
+    '/_wrapper/_authenticated/my-codes': {
+      id: '/_wrapper/_authenticated/my-codes'
       path: '/my-codes'
       fullPath: '/my-codes'
-      preLoaderRoute: typeof AuthenticatedMyCodesImport
-      parentRoute: typeof AuthenticatedImport
+      preLoaderRoute: typeof WrapperAuthenticatedMyCodesImport
+      parentRoute: typeof WrapperAuthenticatedImport
     }
-    '/_authenticated/text': {
-      id: '/_authenticated/text'
+    '/_wrapper/_authenticated/text': {
+      id: '/_wrapper/_authenticated/text'
       path: '/text'
       fullPath: '/text'
-      preLoaderRoute: typeof AuthenticatedTextImport
-      parentRoute: typeof AuthenticatedImport
+      preLoaderRoute: typeof WrapperAuthenticatedTextImport
+      parentRoute: typeof WrapperAuthenticatedImport
     }
-    '/_authenticated/vcard': {
-      id: '/_authenticated/vcard'
+    '/_wrapper/_authenticated/url': {
+      id: '/_wrapper/_authenticated/url'
+      path: '/url'
+      fullPath: '/url'
+      preLoaderRoute: typeof WrapperAuthenticatedUrlImport
+      parentRoute: typeof WrapperAuthenticatedImport
+    }
+    '/_wrapper/_authenticated/vcard': {
+      id: '/_wrapper/_authenticated/vcard'
       path: '/vcard'
       fullPath: '/vcard'
-      preLoaderRoute: typeof AuthenticatedVcardImport
-      parentRoute: typeof AuthenticatedImport
+      preLoaderRoute: typeof WrapperAuthenticatedVcardImport
+      parentRoute: typeof WrapperAuthenticatedImport
     }
-    '/_authenticated/profile': {
-      id: '/_authenticated/profile'
+    '/_wrapper/_authenticated/profile': {
+      id: '/_wrapper/_authenticated/profile'
       path: '/profile'
       fullPath: '/profile'
-      preLoaderRoute: typeof AuthenticatedProfileLazyImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/': {
-      id: '/_authenticated/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedIndexImport
-      parentRoute: typeof AuthenticatedImport
+      preLoaderRoute: typeof WrapperAuthenticatedProfileLazyImport
+      parentRoute: typeof WrapperAuthenticatedImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface AuthenticatedRouteChildren {
-  AuthenticatedEmailRoute: typeof AuthenticatedEmailRoute
-  AuthenticatedMyCodesRoute: typeof AuthenticatedMyCodesRoute
-  AuthenticatedTextRoute: typeof AuthenticatedTextRoute
-  AuthenticatedVcardRoute: typeof AuthenticatedVcardRoute
-  AuthenticatedProfileLazyRoute: typeof AuthenticatedProfileLazyRoute
-  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+interface WrapperAuthenticatedRouteChildren {
+  WrapperAuthenticatedEmailRoute: typeof WrapperAuthenticatedEmailRoute
+  WrapperAuthenticatedMyCodesRoute: typeof WrapperAuthenticatedMyCodesRoute
+  WrapperAuthenticatedTextRoute: typeof WrapperAuthenticatedTextRoute
+  WrapperAuthenticatedUrlRoute: typeof WrapperAuthenticatedUrlRoute
+  WrapperAuthenticatedVcardRoute: typeof WrapperAuthenticatedVcardRoute
+  WrapperAuthenticatedProfileLazyRoute: typeof WrapperAuthenticatedProfileLazyRoute
 }
 
-const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedEmailRoute: AuthenticatedEmailRoute,
-  AuthenticatedMyCodesRoute: AuthenticatedMyCodesRoute,
-  AuthenticatedTextRoute: AuthenticatedTextRoute,
-  AuthenticatedVcardRoute: AuthenticatedVcardRoute,
-  AuthenticatedProfileLazyRoute: AuthenticatedProfileLazyRoute,
-  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+const WrapperAuthenticatedRouteChildren: WrapperAuthenticatedRouteChildren = {
+  WrapperAuthenticatedEmailRoute: WrapperAuthenticatedEmailRoute,
+  WrapperAuthenticatedMyCodesRoute: WrapperAuthenticatedMyCodesRoute,
+  WrapperAuthenticatedTextRoute: WrapperAuthenticatedTextRoute,
+  WrapperAuthenticatedUrlRoute: WrapperAuthenticatedUrlRoute,
+  WrapperAuthenticatedVcardRoute: WrapperAuthenticatedVcardRoute,
+  WrapperAuthenticatedProfileLazyRoute: WrapperAuthenticatedProfileLazyRoute,
 }
 
-const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
-  AuthenticatedRouteChildren,
-)
+const WrapperAuthenticatedRouteWithChildren =
+  WrapperAuthenticatedRoute._addFileChildren(WrapperAuthenticatedRouteChildren)
+
+interface WrapperRouteChildren {
+  WrapperAuthenticatedRoute: typeof WrapperAuthenticatedRouteWithChildren
+  WrapperLoginRoute: typeof WrapperLoginRoute
+  WrapperRegisterRoute: typeof WrapperRegisterRoute
+}
+
+const WrapperRouteChildren: WrapperRouteChildren = {
+  WrapperAuthenticatedRoute: WrapperAuthenticatedRouteWithChildren,
+  WrapperLoginRoute: WrapperLoginRoute,
+  WrapperRegisterRoute: WrapperRegisterRoute,
+}
+
+const WrapperRouteWithChildren =
+  WrapperRoute._addFileChildren(WrapperRouteChildren)
 
 export interface FileRoutesByFullPath {
-  '': typeof AuthenticatedRouteWithChildren
-  '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
-  '/email': typeof AuthenticatedEmailRoute
-  '/my-codes': typeof AuthenticatedMyCodesRoute
-  '/text': typeof AuthenticatedTextRoute
-  '/vcard': typeof AuthenticatedVcardRoute
-  '/profile': typeof AuthenticatedProfileLazyRoute
-  '/': typeof AuthenticatedIndexRoute
+  '/$id': typeof IdRoute
+  '': typeof WrapperAuthenticatedRouteWithChildren
+  '/login': typeof WrapperLoginRoute
+  '/register': typeof WrapperRegisterRoute
+  '/email': typeof WrapperAuthenticatedEmailRoute
+  '/my-codes': typeof WrapperAuthenticatedMyCodesRoute
+  '/text': typeof WrapperAuthenticatedTextRoute
+  '/url': typeof WrapperAuthenticatedUrlRoute
+  '/vcard': typeof WrapperAuthenticatedVcardRoute
+  '/profile': typeof WrapperAuthenticatedProfileLazyRoute
 }
 
 export interface FileRoutesByTo {
-  '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
-  '/email': typeof AuthenticatedEmailRoute
-  '/my-codes': typeof AuthenticatedMyCodesRoute
-  '/text': typeof AuthenticatedTextRoute
-  '/vcard': typeof AuthenticatedVcardRoute
-  '/profile': typeof AuthenticatedProfileLazyRoute
-  '/': typeof AuthenticatedIndexRoute
+  '/$id': typeof IdRoute
+  '': typeof WrapperAuthenticatedRouteWithChildren
+  '/login': typeof WrapperLoginRoute
+  '/register': typeof WrapperRegisterRoute
+  '/email': typeof WrapperAuthenticatedEmailRoute
+  '/my-codes': typeof WrapperAuthenticatedMyCodesRoute
+  '/text': typeof WrapperAuthenticatedTextRoute
+  '/url': typeof WrapperAuthenticatedUrlRoute
+  '/vcard': typeof WrapperAuthenticatedVcardRoute
+  '/profile': typeof WrapperAuthenticatedProfileLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
-  '/_authenticated/email': typeof AuthenticatedEmailRoute
-  '/_authenticated/my-codes': typeof AuthenticatedMyCodesRoute
-  '/_authenticated/text': typeof AuthenticatedTextRoute
-  '/_authenticated/vcard': typeof AuthenticatedVcardRoute
-  '/_authenticated/profile': typeof AuthenticatedProfileLazyRoute
-  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/$id': typeof IdRoute
+  '/_wrapper': typeof WrapperRouteWithChildren
+  '/_wrapper/_authenticated': typeof WrapperAuthenticatedRouteWithChildren
+  '/_wrapper/login': typeof WrapperLoginRoute
+  '/_wrapper/register': typeof WrapperRegisterRoute
+  '/_wrapper/_authenticated/email': typeof WrapperAuthenticatedEmailRoute
+  '/_wrapper/_authenticated/my-codes': typeof WrapperAuthenticatedMyCodesRoute
+  '/_wrapper/_authenticated/text': typeof WrapperAuthenticatedTextRoute
+  '/_wrapper/_authenticated/url': typeof WrapperAuthenticatedUrlRoute
+  '/_wrapper/_authenticated/vcard': typeof WrapperAuthenticatedVcardRoute
+  '/_wrapper/_authenticated/profile': typeof WrapperAuthenticatedProfileLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/$id'
     | ''
     | '/login'
     | '/register'
     | '/email'
     | '/my-codes'
     | '/text'
+    | '/url'
     | '/vcard'
     | '/profile'
-    | '/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/$id'
+    | ''
     | '/login'
     | '/register'
     | '/email'
     | '/my-codes'
     | '/text'
+    | '/url'
     | '/vcard'
     | '/profile'
-    | '/'
   id:
     | '__root__'
-    | '/_authenticated'
-    | '/login'
-    | '/register'
-    | '/_authenticated/email'
-    | '/_authenticated/my-codes'
-    | '/_authenticated/text'
-    | '/_authenticated/vcard'
-    | '/_authenticated/profile'
-    | '/_authenticated/'
+    | '/$id'
+    | '/_wrapper'
+    | '/_wrapper/_authenticated'
+    | '/_wrapper/login'
+    | '/_wrapper/register'
+    | '/_wrapper/_authenticated/email'
+    | '/_wrapper/_authenticated/my-codes'
+    | '/_wrapper/_authenticated/text'
+    | '/_wrapper/_authenticated/url'
+    | '/_wrapper/_authenticated/vcard'
+    | '/_wrapper/_authenticated/profile'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  LoginRoute: typeof LoginRoute
-  RegisterRoute: typeof RegisterRoute
+  IdRoute: typeof IdRoute
+  WrapperRoute: typeof WrapperRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  AuthenticatedRoute: AuthenticatedRouteWithChildren,
-  LoginRoute: LoginRoute,
-  RegisterRoute: RegisterRoute,
+  IdRoute: IdRoute,
+  WrapperRoute: WrapperRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -273,51 +326,64 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/_authenticated",
-        "/login",
-        "/register"
+        "/$id",
+        "/_wrapper"
       ]
     },
-    "/_authenticated": {
-      "filePath": "_authenticated.tsx",
+    "/$id": {
+      "filePath": "$id.tsx"
+    },
+    "/_wrapper": {
+      "filePath": "_wrapper.tsx",
       "children": [
-        "/_authenticated/email",
-        "/_authenticated/my-codes",
-        "/_authenticated/text",
-        "/_authenticated/vcard",
-        "/_authenticated/profile",
-        "/_authenticated/"
+        "/_wrapper/_authenticated",
+        "/_wrapper/login",
+        "/_wrapper/register"
       ]
     },
-    "/login": {
-      "filePath": "login.tsx"
+    "/_wrapper/_authenticated": {
+      "filePath": "_wrapper/_authenticated.tsx",
+      "parent": "/_wrapper",
+      "children": [
+        "/_wrapper/_authenticated/email",
+        "/_wrapper/_authenticated/my-codes",
+        "/_wrapper/_authenticated/text",
+        "/_wrapper/_authenticated/url",
+        "/_wrapper/_authenticated/vcard",
+        "/_wrapper/_authenticated/profile"
+      ]
     },
-    "/register": {
-      "filePath": "register.tsx"
+    "/_wrapper/login": {
+      "filePath": "_wrapper/login.tsx",
+      "parent": "/_wrapper"
     },
-    "/_authenticated/email": {
-      "filePath": "_authenticated/email.tsx",
-      "parent": "/_authenticated"
+    "/_wrapper/register": {
+      "filePath": "_wrapper/register.tsx",
+      "parent": "/_wrapper"
     },
-    "/_authenticated/my-codes": {
-      "filePath": "_authenticated/my-codes.tsx",
-      "parent": "/_authenticated"
+    "/_wrapper/_authenticated/email": {
+      "filePath": "_wrapper/_authenticated/email.tsx",
+      "parent": "/_wrapper/_authenticated"
     },
-    "/_authenticated/text": {
-      "filePath": "_authenticated/text.tsx",
-      "parent": "/_authenticated"
+    "/_wrapper/_authenticated/my-codes": {
+      "filePath": "_wrapper/_authenticated/my-codes.tsx",
+      "parent": "/_wrapper/_authenticated"
     },
-    "/_authenticated/vcard": {
-      "filePath": "_authenticated/vcard.tsx",
-      "parent": "/_authenticated"
+    "/_wrapper/_authenticated/text": {
+      "filePath": "_wrapper/_authenticated/text.tsx",
+      "parent": "/_wrapper/_authenticated"
     },
-    "/_authenticated/profile": {
-      "filePath": "_authenticated/profile.lazy.tsx",
-      "parent": "/_authenticated"
+    "/_wrapper/_authenticated/url": {
+      "filePath": "_wrapper/_authenticated/url.tsx",
+      "parent": "/_wrapper/_authenticated"
     },
-    "/_authenticated/": {
-      "filePath": "_authenticated/index.tsx",
-      "parent": "/_authenticated"
+    "/_wrapper/_authenticated/vcard": {
+      "filePath": "_wrapper/_authenticated/vcard.tsx",
+      "parent": "/_wrapper/_authenticated"
+    },
+    "/_wrapper/_authenticated/profile": {
+      "filePath": "_wrapper/_authenticated/profile.lazy.tsx",
+      "parent": "/_wrapper/_authenticated"
     }
   }
 }

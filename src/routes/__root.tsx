@@ -1,8 +1,7 @@
-import * as React from "react";
-import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
-import Navigation from "../components/Navigation";
-import Header from "@components/Header";
 import { UseAPIs } from "@hooks/useAPIs";
+import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import * as React from "react";
 
 type RouterContext = {
 	apis: UseAPIs;
@@ -16,9 +15,8 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 function RootComponent() {
 	return (
 		<React.Fragment>
-			<Header />
-			<Navigation />
 			<Outlet />
+			<TanStackRouterDevtools />
 		</React.Fragment>
 	);
 }

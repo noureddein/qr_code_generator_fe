@@ -1,23 +1,27 @@
 import { z } from "zod";
 
 // Shared Schema Components
-const qrCodeOptions = z.object({
+export const qrCodeOptions = z.object({
 	colorDark: z.string(),
 	colorLight: z.string(),
 	quietZoneColor: z.string(),
 	size: z.number().min(200).max(2000),
 	quietZone: z.number().min(0).max(100),
-	qrName: z
+	dots: z.number().min(0.1).max(1),
+});
+
+const defaultOptions = z.object({
+	name: z
 		.string()
 		.min(3, "Min. characters is 3.")
 		.max(50, "Max. characters is 50."),
 	id: z.string().optional(),
 });
 
-export const urlSchema = qrCodeOptions.extend({
+export const urlSchema = defaultOptions.extend({
 	url: z.string().url("Invalid URL."),
 });
-export const emailSchema = qrCodeOptions.extend({
+export const emailSchema = defaultOptions.extend({
 	email: z
 		.string()
 		.nonempty("Email cannot be empty.")
@@ -26,7 +30,8 @@ export const emailSchema = qrCodeOptions.extend({
 	message: z.string().nonempty("Message cannot be empty."),
 });
 
-export const vCardSchema = qrCodeOptions.extend({
+export const vCardSchema = defaultOptions.extend({
+	id: z.string().optional(),
 	firstName: z
 		.string()
 		.trim()
@@ -65,7 +70,7 @@ export const vCardSchema = qrCodeOptions.extend({
 	country: z.string(),
 });
 
-export const textSchema = qrCodeOptions.extend({
+export const textSchema = defaultOptions.extend({
 	text: z.string(),
 });
 

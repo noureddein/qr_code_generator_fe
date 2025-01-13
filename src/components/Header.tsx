@@ -11,7 +11,7 @@ const Header = () => {
 		<header>
 			<Container>
 				<div className="flex items-center justify-between">
-					<Link to="/">
+					<Link to="/url">
 						<h1 className="text-4xl font-medium text-white ">
 							QR Code
 						</h1>

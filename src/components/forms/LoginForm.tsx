@@ -29,7 +29,7 @@ const LoginForm = () => {
 		},
 		onSuccess: async (result) => {
 			onSetAuth(result.accessToken, result.user);
-			await navigate({ to: "/" });
+			await navigate({ to: "/my-codes" });
 		},
 	});
 

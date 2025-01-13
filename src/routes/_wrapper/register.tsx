@@ -1,21 +1,16 @@
-import Container from "@components/Container";
-import LoginForm from "@components/forms/LoginForm";
+import RegisterForm from "@components/forms/RegisterForm";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/_wrapper/register")({
 	component: RouteComponent,
 	beforeLoad: async ({ context: { apis } }) => {
 		const response = await apis.identity();
 		if (response.isLoggedIn) {
-			throw redirect({ to: "/" });
+			throw redirect({ to: "/url" });
 		}
 	},
 });
 
 function RouteComponent() {
-	return (
-		<Container>
-			<LoginForm />
-		</Container>
-	);
+	return <RegisterForm />;
 }

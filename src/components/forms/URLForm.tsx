@@ -2,7 +2,6 @@ import Input from "@components/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useSaveQrCode from "@hooks/useSaveQrCode";
 import useUpdateQRCode from "@hooks/useUpdateQRCode";
-import { defaultQROpts } from "@src/constants";
 import { ErrorResponse, QRCodeTypes } from "@src/types.d";
 import { useQueryClient } from "@tanstack/react-query";
 import { URLFormDataTypes, urlSchema } from "@validation/qrCodeOptions";
@@ -12,11 +11,11 @@ import toast from "react-hot-toast";
 
 const URLForm = ({ data }: { data?: URLFormDataTypes }) => {
 	const initialValues: URLFormDataTypes = data || {
-		...defaultQROpts,
-		qrName: "",
+		name: "",
 		url: "https://www.easyproject.cn",
 	};
 	const queryClient = useQueryClient();
+
 	const {
 		mutate: saveQR,
 		isPending: isSaving,
@@ -24,7 +23,9 @@ const URLForm = ({ data }: { data?: URLFormDataTypes }) => {
 		context,
 	} = useSaveQrCode();
 
-	const { mutate: updateQR, isPending: isUpdating } = useUpdateQRCode();
+	const { mutate: updateQR, isPending: isUpdating } = useUpdateQRCode({
+		URL: `/api/qr-codes/url`,
+	});
 	const {
 		register,
 		handleSubmit,
@@ -37,14 +38,9 @@ const URLForm = ({ data }: { data?: URLFormDataTypes }) => {
 	});
 
 	const onSave = async (data: URLFormDataTypes) => {
-		const { url, ...rest } = data;
 		const dataToSave = {
-			data: data,
+			qrData: { ...data, text: data.url },
 			type: QRCodeTypes.URL,
-			qrOptions: {
-				text: url,
-				...rest,
-			},
 		};
 		saveQR(dataToSave, {
 			onSuccess: (res) => {
@@ -105,7 +101,7 @@ const URLForm = ({ data }: { data?: URLFormDataTypes }) => {
 			<div className="flex flex-col">
 				<div className="flex-auto w-full p-4">
 					<Input
-						id="qrName"
+						id="name"
 						label="QR Code name"
 						register={register}
 						errors={errors}

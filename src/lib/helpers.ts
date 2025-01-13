@@ -1,5 +1,6 @@
 import { vCardFormDataTypes } from "@validation/qrCodeOptions";
 import vCardsJS from "vcards-js";
+import { saveAs } from "file-saver";
 
 export const downloadPNG = (
 	data: string | undefined,
@@ -10,6 +11,11 @@ export const downloadPNG = (
 	link.href = data;
 	link.download = filename;
 	link.click();
+};
+
+export const downloadVCF = (text: BlobPart, fileName: string) => {
+	const file = new Blob([text], { type: "text/plain;charset=utf-8" });
+	saveAs(file, fileName + ".vcf");
 };
 
 export const createVCard = (vCardData: vCardFormDataTypes) => {
@@ -31,16 +37,19 @@ export const createVCard = (vCardData: vCardFormDataTypes) => {
 	vCard.workAddress.stateProvince = vCardData.state;
 	vCard.workAddress.countryRegion = vCardData.country;
 
-	return vCard.getFormattedString();
+	return vCard;
 };
 
 export const formatDate = (date: Date) => {
 	try {
 		const parsedDate = new Date(date);
-		return new Intl.DateTimeFormat("en-GB", {
-			day: "2-digit",
-			month: "2-digit",
-			year: "2-digit",
+		return new Intl.DateTimeFormat("en-US", {
+			month: "short", // Short month name (e.g., Jan)
+			day: "numeric", // Day of the month (e.g., 4)
+			year: "numeric", // Full year (e.g., 2025)
+			// day: "2-digit",
+			// month: "2-digit",
+			// year: "2-digit",
 			// hour: "2-digit",
 			// minute: "2-digit",
 			// hourCycle: "h12", // 24-hour format

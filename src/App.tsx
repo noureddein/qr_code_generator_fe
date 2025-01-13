@@ -4,10 +4,14 @@ import useAPIs from "@hooks/useAPIs";
 import useAuth from "@store/authStore";
 import { useQuery } from "@tanstack/react-query";
 import { useLayoutEffect } from "react";
+import Container from "@components/Container";
 
 const router = createRouter({
 	routeTree,
 	context: { apis: undefined!, accessToken: undefined! },
+	defaultNotFoundComponent: () => {
+		return <Container>404 Sorry, Page not found.</Container>;
+	},
 });
 
 declare module "@tanstack/react-router" {

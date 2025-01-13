@@ -5,6 +5,7 @@ import useDiscloser from "@hooks/useDiscloser";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Spinner } from "flowbite-react/components/Spinner";
 import useAPIs from "@hooks/useAPIs";
+import toast from "react-hot-toast";
 
 interface DeleteModalProps {
 	id: string;
@@ -25,9 +26,14 @@ function DeleteModal({ id, childrenButton, qrName }: DeleteModalProps) {
 			await queryClient.invalidateQueries({
 				queryKey: ["get_many_qr_codes"],
 			});
+			toast.success(`\"${qrName}\" deleted successfully`);
 		},
 		onError: (err) => {
 			console.log(err);
+			toast.error(
+				err.response?.data?.message ||
+					`Error wile deleting \"${qrName}\"`
+			);
 		},
 	});
 

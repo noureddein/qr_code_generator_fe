@@ -7,7 +7,7 @@ type Tap = { tabName: string; path: string };
 const tabs: Tap[] = [
 	{
 		tabName: "url",
-		path: "/",
+		path: "/url",
 	},
 	{
 		tabName: "text",

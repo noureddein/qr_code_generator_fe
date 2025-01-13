@@ -8,7 +8,7 @@ interface QRImageProps {
 }
 const QRImage = ({ imgSrc, isLoading }: QRImageProps) => {
 	return (
-		<div className="relative w-full ">
+		<div className="relative w-full">
 			<ImageOverlay isLoading={isLoading} />
 			<img
 				className="w-full aspect-square"

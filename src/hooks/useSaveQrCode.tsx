@@ -1,7 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import usePrivateServer from "./usePrivateServer";
 import {
-	QRDataToSubmit,
 	URLFormDataTypes,
 	vCardFormDataTypes,
 	EmailFormDataTypes,
@@ -11,13 +10,13 @@ import { AxiosError, AxiosResponse } from "axios";
 import { ErrorResponse, QRCodeTypes } from "@src/types.d";
 
 export interface MutationDataProps {
-	data:
+	qrData: (
 		| URLFormDataTypes
 		| vCardFormDataTypes
 		| EmailFormDataTypes
-		| TextFormDataTypes;
+		| TextFormDataTypes
+	) & { text: string };
 	type: QRCodeTypes;
-	qrOptions: QRDataToSubmit;
 }
 
 interface MutationContext {

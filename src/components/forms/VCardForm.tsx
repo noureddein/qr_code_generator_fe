@@ -6,11 +6,12 @@ import { vCardFormDataTypes, vCardSchema } from "@validation/qrCodeOptions";
 import { Spinner } from "flowbite-react/components/Spinner";
 import { useForm } from "react-hook-form";
 import { ErrorResponse, QRCodeTypes } from "@src/types.d";
-import { defaultQROpts } from "@src/constants";
+import useUpdateQRCode from "@hooks/useUpdateQRCode";
+import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 	const initialValues = data || {
-		...defaultQROpts,
 		firstName: "Do Media",
 		lastName: "",
 		organization: "Do Media Agency",
@@ -25,8 +26,9 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 		city: "Amman",
 		state: "Amman Gov",
 		country: "Jordan",
-		qrName: "Do Media QR code",
+		name: "Do Media QR code",
 	};
+	const queryClient = useQueryClient();
 
 	const {
 		mutate: saveQR,
@@ -34,6 +36,10 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 		isError,
 		context,
 	} = useSaveQrCode();
+
+	const { mutate: updateQR, isPending: isUpdating } = useUpdateQRCode({
+		URL: `/api/qr-codes/vcard`,
+	});
 
 	const {
 		register,
@@ -46,34 +52,20 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 		defaultValues: initialValues,
 	});
 
-	const onSubmit = (data: vCardFormDataTypes) => {
-		const {
-			colorDark,
-			colorLight,
-			quietZone,
-			size,
-			quietZoneColor,
-			qrName,
-		} = data;
-
-		const text = createVCard(data);
-
+	const onSave = async (data: vCardFormDataTypes) => {
+		const vCard = createVCard(data);
 		const dataToSave = {
-			data: data,
-			type: QRCodeTypes.VCARD,
-			qrOptions: {
-				text,
-				colorDark,
-				colorLight,
-				quietZone,
-				size,
-				quietZoneColor,
-				qrName,
+			qrData: {
+				text: vCard.getFormattedString(),
+				...data,
 			},
+			type: QRCodeTypes.VCARD,
 		};
-
 		saveQR(dataToSave, {
-			onSuccess: () => reset(),
+			onSuccess: (res) => {
+				toast.success(res.data.message);
+				reset();
+			},
 			onError: (err) => {
 				const errStatus = err.response?.status as number;
 				const responseData = err.response?.data as ErrorResponse;
@@ -86,12 +78,50 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 		});
 	};
 
+	const onUpdate = async (data: vCardFormDataTypes) => {
+		const vCard = createVCard(data);
+		const text = vCard.getFormattedString();
+		updateQR(
+			{ data: { text, ...data } },
+			{
+				onSuccess: async (res) => {
+					await queryClient.invalidateQueries({
+						queryKey: ["get_many_qr_codes"],
+					});
+					toast.success(res.message);
+				},
+				onError: (err) => {
+					const errStatus = err.response?.status as number;
+					const responseData = err.response?.data as ErrorResponse;
+					if (errStatus >= 409 && errStatus < 500) {
+						responseData.errors.forEach((err: any) => {
+							setError(err.path, { message: err.msg });
+						});
+					} else {
+						console.log(err);
+						toast.error(
+							responseData?.message || "Unexpected error"
+						);
+					}
+				},
+			}
+		);
+	};
+
+	const onSubmit = (data: vCardFormDataTypes) => {
+		if (initialValues.id) {
+			onUpdate(data);
+		} else {
+			onSave(data);
+		}
+	};
+
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<div className="flex">
 				<div className="flex-auto w-full p-4">
 					<Input
-						id="qrName"
+						id="name"
 						label="QR Code name"
 						register={register}
 						errors={errors}
@@ -249,11 +279,15 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 
 					<div className="flex mt-4">
 						<button
-							disabled={!isValid || isSaving}
+							disabled={!isValid || isSaving || isUpdating}
 							type="submit"
 							className="focus:outline-none text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:hover:cursor-not-allowed me-0 ms-auto"
 						>
-							{isSaving ? <Spinner color="gray" /> : "Save"}
+							{isSaving || isUpdating ? (
+								<Spinner color="gray" />
+							) : (
+								"Save"
+							)}
 						</button>
 					</div>
 				</div>
