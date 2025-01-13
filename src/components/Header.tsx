@@ -1,5 +1,5 @@
 import Container from "./Container";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { Spinner } from "flowbite-react/components/Spinner";
 import useAPIs from "@hooks/useAPIs";
@@ -24,9 +24,9 @@ const Header = () => {
 
 const AuthButtons = () => {
 	const { logout } = useAPIs();
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 	const user = useAuth((s) => s.user);
-	const onSetAuth = useAuth((s) => s.onSetAuth);
+	// const onSetAuth = useAuth((s) => s.onSetAuth);
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: logout,
