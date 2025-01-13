@@ -32,8 +32,11 @@ const AuthButtons = () => {
 	const { mutate, isPending } = useMutation({
 		mutationFn: logout,
 		onSuccess: async () => {
-			window.location.reload();
+			// window.location.reload();
 			await navigate({ to: "/login" });
+		},
+		onError: (err) => {
+			console.log(err);
 		},
 	});
 	// if (!user) {
