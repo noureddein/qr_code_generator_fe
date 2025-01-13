@@ -1,4 +1,3 @@
-// import { useAccessToken } from "@providers/AuthProvider";
 import Container from "./Container";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
@@ -24,28 +23,22 @@ const Header = () => {
 };
 
 const AuthButtons = () => {
-	// const { auth, isLoading } = useAccessToken();
 	const { logout } = useAPIs();
 	const navigate = useNavigate();
 	const user = useAuth((s) => s.user);
+	const onSetAuth = useAuth((s) => s.onSetAuth);
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: logout,
 		onSuccess: async () => {
-			// window.location.reload();
+			onSetAuth(null, null);
 			await navigate({ to: "/login" });
 		},
 		onError: (err) => {
 			console.log(err);
 		},
 	});
-	// if (!user) {
-	// 	return (
-	// 		<div role="status" className="max-w-sm animate-pulse">
-	// 			<div className="w-48 h-5 bg-green-200 rounded-full dark:bg-gray-700"></div>
-	// 		</div>
-	// 	);
-	// }
+
 	return (
 		<>
 			{user && (
