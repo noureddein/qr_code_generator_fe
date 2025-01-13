@@ -14,7 +14,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 });
 
 const TanStackRouterDevtools =
-	process.env.VITE_NODE_ENV === "production"
+	import.meta.env.VITE_NODE_ENV === "production"
 		? () => null // Render nothing in production
 		: React.lazy(() =>
 				// Lazy load in development
@@ -24,6 +24,8 @@ const TanStackRouterDevtools =
 					// default: res.TanStackRouterDevtoolsPanel
 				}))
 			);
+
+console.log({ ENV: import.meta.env.VITE_NODE_ENV });
 
 function RootComponent() {
 	return (
