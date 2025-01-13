@@ -13,14 +13,14 @@ export const downloadPNG = (
 	link.click();
 };
 
-// const downloadTxtFile = (vcfText: BlobPart) => {
-// 	const element = document.createElement("a");
-// 	const file = new Blob([vcfText], { type: "text/plain;charset=utf-8" });
-// 	element.href = URL.createObjectURL(file);
-// 	element.download = "myFile.vcf";
-// 	document.body.appendChild(element);
-// 	element.click();
-// };
+export const downloadVcfFile = (vcfText: BlobPart) => {
+	const element = document.createElement("a");
+	const file = new Blob([vcfText], { type: "text/plain;charset=utf-8" });
+	element.href = URL.createObjectURL(file);
+	element.download = "myFile.vcf";
+	document.body.appendChild(element);
+	element.click();
+};
 
 export const downloadVCF = (text: BlobPart, fileName: string) => {
 	const file = new Blob([text], { type: "text/plain;charset=utf-8" });

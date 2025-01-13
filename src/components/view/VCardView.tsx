@@ -1,4 +1,4 @@
-import { downloadVCF } from "@lib/helpers";
+import { downloadVcfFile } from "@lib/helpers";
 import { Button } from "flowbite-react/components/Button";
 import { FaFax, FaGlobe, FaMapMarkerAlt } from "react-icons/fa";
 import { FaPhone } from "react-icons/fa6";
@@ -28,7 +28,7 @@ const VCardView = ({ qrData }: VCardProps) => {
 		country,
 		fax,
 		text,
-		name,
+		// name,
 	} = qrData;
 
 	return (
@@ -185,13 +185,13 @@ const VCardView = ({ qrData }: VCardProps) => {
 				<div className="col-span-4">
 					<Button
 						className="absolute flex items-start justify-center uppercase rounded-full bottom-4 right-4 w-14 h-14 sm:hidden"
-						onClick={() => downloadVCF(text, name)}
+						onClick={() => downloadVcfFile(text)}
 					>
 						<IoMdPersonAdd className="p-0 size-7" />
 					</Button>
 					<Button
 						className="hidden w-full uppercase sm:flex"
-						onClick={() => downloadVCF(text, name)}
+						onClick={() => downloadVcfFile(text)}
 					>
 						<IoMdPersonAdd className="w-5 h-5 mr-2" /> Download
 						VCARD

@@ -11,6 +11,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { Spinner } from "flowbite-react/components/Spinner";
 import ModalLoader from "./ModalLoader";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface EditQRCodeModalProps {
 	id: string;
@@ -70,6 +71,7 @@ interface DesignFormProps {
 
 const DesignForm = ({ initialValues, image, id, onClose }: DesignFormProps) => {
 	const [img, setImg] = useState(image);
+	const queryClient = useQueryClient();
 	const {
 		register,
 		handleSubmit,
@@ -94,7 +96,12 @@ const DesignForm = ({ initialValues, image, id, onClose }: DesignFormProps) => {
 		onUpdate(
 			{ ...values, id },
 			{
-				onSuccess: () => onClose(),
+				onSuccess: async () => {
+					await queryClient.invalidateQueries({
+						queryKey: ["get_many_qr_codes"],
+					});
+					onClose();
+				},
 			}
 		);
 	};
