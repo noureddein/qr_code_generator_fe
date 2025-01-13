@@ -1,7 +1,7 @@
 import VCardView from "@components/view/VCardView";
 import { server } from "@lib/server";
 import { QRCodeTypes } from "@src/types.d";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 import axios from "axios";
 
 export const Route = createFileRoute("/$id")({
@@ -30,6 +30,15 @@ function RouteComponent() {
 		return <p>{data?.message || "Unexpected error."}</p>;
 	}
 
+	return (
+		<>
+			<Render data={data} />
+			<Outlet />
+		</>
+	);
+}
+
+const Render = ({ data }: { data: any }) => {
 	switch (data.row.type) {
 		case QRCodeTypes.VCARD:
 			return <VCardView qrData={data.row.qrData} />;
@@ -40,4 +49,4 @@ function RouteComponent() {
 		default:
 			break;
 	}
-}
+};
