@@ -1,7 +1,5 @@
-import { downloadPNG } from "@lib/helpers";
 import useAuth from "@store/authStore";
 // import { useAccessToken } from "@providers/AuthProvider";
-import { Spinner } from "flowbite-react/components/Spinner";
 
 interface QRButtonsProps {
 	isPending: boolean;
@@ -13,7 +11,7 @@ interface QRButtonsProps {
 
 const QRButtons = ({
 	isPending,
-	data,
+	// data,
 	// isValid,
 	isEqualed,
 	// onSave,

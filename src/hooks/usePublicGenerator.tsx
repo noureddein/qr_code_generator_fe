@@ -12,7 +12,7 @@ const usePublicGenerator = () => {
 			const errStatus = err.response?.status as number;
 			const responseData = err.response?.data as ErrorResponse;
 			if (errStatus >= 409) {
-				responseData.errors.forEach((err: any) => {
+				responseData.errors.forEach(() => {
 					// setError(err.path, { message: err.msg });
 				});
 			}

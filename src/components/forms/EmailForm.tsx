@@ -2,16 +2,18 @@ import Input from "@components/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useSaveQrCode, { MutationDataProps } from "@hooks/useSaveQrCode";
 import { ErrorResponse, QRCodeTypes } from "@src/types.d";
-import {
-	EmailFormDataTypes,
-	emailSchema,
-	QRDataToSubmit,
-} from "@validation/qrCodeOptions";
+import { EmailFormDataTypes, emailSchema } from "@validation/qrCodeOptions";
 import { Accordion } from "flowbite-react/components/Accordion";
 import { Spinner } from "flowbite-react/components/Spinner";
 import { useForm } from "react-hook-form";
 
-const EmailForm = () => {
+const EmailForm = ({ data }: { data?: EmailFormDataTypes }) => {
+	const initialValues: EmailFormDataTypes = data || {
+		name: "",
+		email: "",
+		subject: "",
+		message: "",
+	};
 	const {
 		mutate: saveQR,
 		isPending: isSaving,
@@ -26,29 +28,18 @@ const EmailForm = () => {
 		formState: { errors, isValid },
 	} = useForm<EmailFormDataTypes>({
 		resolver: zodResolver(emailSchema),
-		defaultValues: {
-			colorLight: "#ffffff",
-			colorDark: "#000000",
-			quietZone: 20,
-			quietZoneColor: "#ffffff",
-			size: 1000,
-			email: "",
-			subject: "",
-			message: "",
-			qrName: "",
-		},
+		defaultValues: initialValues,
 	});
 
 	const onSubmit = (data: EmailFormDataTypes) => {
 		const { email, message, subject, ...rest } = data;
-		const qrData: QRDataToSubmit = {
+		const qrData = {
 			text: `mailto:${email}?subject=${subject}&body=${message}`,
 			...rest,
 		};
 
 		const dataToSave: MutationDataProps = {
-			data,
-			qrOptions: qrData,
+			qrData,
 			type: QRCodeTypes.EMAIL,
 		};
 		saveQR(dataToSave, {
@@ -73,7 +64,7 @@ const EmailForm = () => {
 			<div className="flex">
 				<div className="flex-auto w-full gap-2 p-4">
 					<Input
-						id="qrName"
+						id="name"
 						label="QR Code name"
 						register={register}
 						errors={errors}

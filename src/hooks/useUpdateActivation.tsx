@@ -3,10 +3,6 @@ import usePrivateServer from "./usePrivateServer";
 import { AxiosError, AxiosResponse } from "axios";
 import { ErrorResponse } from "@src/types.d";
 
-interface MutationContext {
-	error?: string;
-}
-
 const useUpdateActivation = ({ id }: { id: string }) => {
 	const privateServer = usePrivateServer();
 	const queryClient = useQueryClient();

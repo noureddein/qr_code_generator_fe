@@ -7,6 +7,7 @@ import useFetchQRCode from "@hooks/useFetchQRCode";
 import { ResponseRow } from "@src/routes/_wrapper/_authenticated/my-codes";
 import { QRCodeTypes } from "@src/types.d";
 import {
+	TextFormDataTypes,
 	URLFormDataTypes,
 	vCardFormDataTypes,
 } from "@validation/qrCodeOptions";
@@ -68,7 +69,7 @@ function EditQRCodeModal({ id, childrenButton }: EditQRCodeModalProps) {
 
 interface UpdateFormProps {
 	qrCodeType: QRCodeTypes | "";
-	data: URLFormDataTypes | vCardFormDataTypes;
+	data: URLFormDataTypes | vCardFormDataTypes | TextFormDataTypes;
 }
 
 const UpdateForm = ({ qrCodeType, data }: UpdateFormProps) => {
@@ -77,7 +78,7 @@ const UpdateForm = ({ qrCodeType, data }: UpdateFormProps) => {
 			return <EmailForm />;
 
 		case QRCodeTypes.TEXT:
-			return <TextForm />;
+			return <TextForm data={data as TextFormDataTypes} />;
 
 		case QRCodeTypes.URL:
 			return <URLForm data={data as URLFormDataTypes} />;

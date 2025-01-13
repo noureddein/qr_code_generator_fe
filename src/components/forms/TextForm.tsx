@@ -7,7 +7,11 @@ import { Accordion } from "flowbite-react/components/Accordion";
 import { Spinner } from "flowbite-react/components/Spinner";
 import { useForm } from "react-hook-form";
 
-const TextForm = () => {
+const TextForm = ({ data }: { data?: TextFormDataTypes }) => {
+	const initialValues: TextFormDataTypes = data || {
+		name: "",
+		text: "",
+	};
 	const {
 		mutate: saveQR,
 		isPending: isSaving,
@@ -23,22 +27,13 @@ const TextForm = () => {
 		setError,
 	} = useForm<TextFormDataTypes>({
 		resolver: zodResolver(textSchema),
-		defaultValues: {
-			text: "",
-			colorLight: "#ffffff",
-			colorDark: "#000000",
-			quietZone: 20,
-			quietZoneColor: "#ffffff",
-			size: 1000,
-			qrName: "",
-		},
+		defaultValues: initialValues,
 	});
 
 	const onSubmit = (data: TextFormDataTypes) => {
 		const dataToSave = {
-			data,
+			qrData: data,
 			type: QRCodeTypes.TEXT,
-			qrOptions: data,
 		};
 		saveQR(dataToSave, {
 			onSuccess: () => reset(),
@@ -61,7 +56,7 @@ const TextForm = () => {
 			<div className="flex">
 				<div className="flex-auto w-full p-4">
 					<Input
-						id="qrName"
+						id="name"
 						label="QR Code name"
 						register={register}
 						errors={errors}
