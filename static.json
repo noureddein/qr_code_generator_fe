@@ -1,8 +1,10 @@
 {
-	"routes": [
-		{
-			"src": "/.*",
-			"dest": "/index.html"
+	"routes": {
+		"/**": "/index.html"
+	},
+	"headers": {
+		"/**": {
+			"Cache-Control": "no-cache"
 		}
-	]
+	}
 }
