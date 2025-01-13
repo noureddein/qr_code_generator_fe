@@ -15,6 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as WrapperImport } from './routes/_wrapper'
 import { Route as IdImport } from './routes/$id'
+import { Route as WrapperIndexImport } from './routes/_wrapper/index'
 import { Route as WrapperRegisterImport } from './routes/_wrapper/register'
 import { Route as WrapperLoginImport } from './routes/_wrapper/login'
 import { Route as WrapperAuthenticatedImport } from './routes/_wrapper/_authenticated'
@@ -41,6 +42,12 @@ const IdRoute = IdImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => rootRoute,
+} as any)
+
+const WrapperIndexRoute = WrapperIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => WrapperRoute,
 } as any)
 
 const WrapperRegisterRoute = WrapperRegisterImport.update({
@@ -141,6 +148,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WrapperRegisterImport
       parentRoute: typeof WrapperImport
     }
+    '/_wrapper/': {
+      id: '/_wrapper/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof WrapperIndexImport
+      parentRoute: typeof WrapperImport
+    }
     '/_wrapper/_authenticated/email': {
       id: '/_wrapper/_authenticated/email'
       path: '/email'
@@ -213,12 +227,14 @@ interface WrapperRouteChildren {
   WrapperAuthenticatedRoute: typeof WrapperAuthenticatedRouteWithChildren
   WrapperLoginRoute: typeof WrapperLoginRoute
   WrapperRegisterRoute: typeof WrapperRegisterRoute
+  WrapperIndexRoute: typeof WrapperIndexRoute
 }
 
 const WrapperRouteChildren: WrapperRouteChildren = {
   WrapperAuthenticatedRoute: WrapperAuthenticatedRouteWithChildren,
   WrapperLoginRoute: WrapperLoginRoute,
   WrapperRegisterRoute: WrapperRegisterRoute,
+  WrapperIndexRoute: WrapperIndexRoute,
 }
 
 const WrapperRouteWithChildren =
@@ -229,6 +245,7 @@ export interface FileRoutesByFullPath {
   '': typeof WrapperAuthenticatedRouteWithChildren
   '/login': typeof WrapperLoginRoute
   '/register': typeof WrapperRegisterRoute
+  '/': typeof WrapperIndexRoute
   '/email': typeof WrapperAuthenticatedEmailRoute
   '/my-codes': typeof WrapperAuthenticatedMyCodesRoute
   '/text': typeof WrapperAuthenticatedTextRoute
@@ -242,6 +259,7 @@ export interface FileRoutesByTo {
   '': typeof WrapperAuthenticatedRouteWithChildren
   '/login': typeof WrapperLoginRoute
   '/register': typeof WrapperRegisterRoute
+  '/': typeof WrapperIndexRoute
   '/email': typeof WrapperAuthenticatedEmailRoute
   '/my-codes': typeof WrapperAuthenticatedMyCodesRoute
   '/text': typeof WrapperAuthenticatedTextRoute
@@ -257,6 +275,7 @@ export interface FileRoutesById {
   '/_wrapper/_authenticated': typeof WrapperAuthenticatedRouteWithChildren
   '/_wrapper/login': typeof WrapperLoginRoute
   '/_wrapper/register': typeof WrapperRegisterRoute
+  '/_wrapper/': typeof WrapperIndexRoute
   '/_wrapper/_authenticated/email': typeof WrapperAuthenticatedEmailRoute
   '/_wrapper/_authenticated/my-codes': typeof WrapperAuthenticatedMyCodesRoute
   '/_wrapper/_authenticated/text': typeof WrapperAuthenticatedTextRoute
@@ -272,6 +291,7 @@ export interface FileRouteTypes {
     | ''
     | '/login'
     | '/register'
+    | '/'
     | '/email'
     | '/my-codes'
     | '/text'
@@ -284,6 +304,7 @@ export interface FileRouteTypes {
     | ''
     | '/login'
     | '/register'
+    | '/'
     | '/email'
     | '/my-codes'
     | '/text'
@@ -297,6 +318,7 @@ export interface FileRouteTypes {
     | '/_wrapper/_authenticated'
     | '/_wrapper/login'
     | '/_wrapper/register'
+    | '/_wrapper/'
     | '/_wrapper/_authenticated/email'
     | '/_wrapper/_authenticated/my-codes'
     | '/_wrapper/_authenticated/text'
@@ -338,7 +360,8 @@ export const routeTree = rootRoute
       "children": [
         "/_wrapper/_authenticated",
         "/_wrapper/login",
-        "/_wrapper/register"
+        "/_wrapper/register",
+        "/_wrapper/"
       ]
     },
     "/_wrapper/_authenticated": {
@@ -359,6 +382,10 @@ export const routeTree = rootRoute
     },
     "/_wrapper/register": {
       "filePath": "_wrapper/register.tsx",
+      "parent": "/_wrapper"
+    },
+    "/_wrapper/": {
+      "filePath": "_wrapper/index.tsx",
       "parent": "/_wrapper"
     },
     "/_wrapper/_authenticated/email": {
