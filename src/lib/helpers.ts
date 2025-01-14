@@ -15,11 +15,12 @@ export const downloadPNG = (
 
 export const downloadVcfFile = (vcfText: BlobPart) => {
 	const element = document.createElement("a");
-	const file = new Blob([vcfText], { type: "vcf" });
+	const file = new Blob([vcfText], { type: "text/vcf" });
 	element.href = URL.createObjectURL(file);
 	element.download = "myFile.vcf";
 	document.body.appendChild(element);
 	element.click();
+	document.body.removeChild(element);
 };
 
 export const downloadVCF = (text: BlobPart, fileName: string) => {
