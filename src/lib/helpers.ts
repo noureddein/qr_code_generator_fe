@@ -15,7 +15,7 @@ export const downloadPNG = (
 
 export const downloadVcfFile = (vcfText: BlobPart) => {
 	const element = document.createElement("a");
-	const file = new Blob([vcfText], { type: "text/vcf" });
+	const file = new Blob([vcfText], { type: "text/vcard" });
 	element.href = URL.createObjectURL(file);
 	element.download = "myFile.vcf";
 	document.body.appendChild(element);
