@@ -98,7 +98,7 @@ const useHandleQRDesign = <TResponse,>({
 					data
 				);
 
-				return response.data;
+				return response;
 			} catch (error) {
 				throw error;
 			}
@@ -107,7 +107,7 @@ const useHandleQRDesign = <TResponse,>({
 			// Return a context object to be used in onError or onSettled
 			return { error: undefined };
 		},
-		onSuccess: async (res) => {
+		onSuccess: async (res: AxiosResponse<{ message: string }>) => {
 			toast.success(res.data.message);
 			await queryClient.invalidateQueries({
 				queryKey: ["get_many_qr_codes"],
