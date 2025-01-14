@@ -1,10 +1,15 @@
-import EmailForm from '@components/forms/EmailForm'
-import { createFileRoute } from '@tanstack/react-router'
+import FormContainer from "@components/FormContainer";
+import EmailForm from "@components/forms/EmailForm";
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/_wrapper/_authenticated/email')({
-  component: RouteComponent,
-})
+export const Route = createFileRoute("/_wrapper/_authenticated/email")({
+	component: RouteComponent,
+});
 
 function RouteComponent() {
-  return <EmailForm />
+	return (
+		<FormContainer>
+			<EmailForm />
+		</FormContainer>
+	);
 }
