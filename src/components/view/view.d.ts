@@ -25,3 +25,23 @@ export interface VCardQrData {
 	state: string;
 	country: string;
 }
+
+export interface URLProps {
+	_id: string;
+	userId: string;
+	qrData: URLQrData;
+	qrDesign: QrDesign;
+	type: string;
+	image: string;
+	nanoId: string;
+	publicLink: string;
+	isActive: boolean;
+	createdAt: string;
+	updatedAt: string;
+}
+
+export interface URLQrData {
+	url: string;
+	name: string;
+	text: string;
+}

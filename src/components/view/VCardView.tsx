@@ -33,7 +33,7 @@ const VCardView = ({ qrData }: VCardProps) => {
 
 	return (
 		<div className=" h-dvh">
-			<div className="pt-12 bg-gradient-to-r from-cyan-500 to-blue-500">
+			<div className="relative pt-12 bg-gradient-to-r from-cyan-500 to-blue-500">
 				<div className="w-full mx-auto shadow-2xl md:w-2/3 lg:w-1/3">
 					<div className="flex flex-col items-center gap-4 p-2 py-8">
 						<div className="w-32 h-32 rounded-full bg-slate-600" />
@@ -64,7 +64,7 @@ const VCardView = ({ qrData }: VCardProps) => {
 				</div>
 			</div>
 
-			<div className="relative w-full px-4 py-8 mx-auto bg-white shadow-2xl md:w-2/3 lg:w-1/3">
+			<div className="w-full px-4 py-8 mx-auto bg-white shadow-2xl md:w-2/3 lg:w-1/3">
 				{!!phoneWork && (
 					<div className="grid items-center grid-cols-4 gap-4 py-4 ">
 						<div className="">
@@ -184,14 +184,24 @@ const VCardView = ({ qrData }: VCardProps) => {
 
 				<div className="col-span-4">
 					<Button
-						className="absolute flex items-start justify-center uppercase rounded-full bottom-4 right-4 w-14 h-14 sm:hidden"
-						onClick={() => downloadVcfFile(text)}
+						className="absolute flex items-start justify-center uppercase rounded-full top-4 right-4 w-14 h-14 sm:hidden"
+						onClick={() =>
+							downloadVcfFile(
+								text,
+								`vcard_${firstName}_${lastName}.vcf`
+							)
+						}
 					>
 						<IoMdPersonAdd className="p-0 size-7" />
 					</Button>
 					<Button
 						className="hidden w-full uppercase sm:flex"
-						onClick={() => downloadVcfFile(text)}
+						onClick={() =>
+							downloadVcfFile(
+								text,
+								`vcard_${firstName}_${lastName}.vcf`
+							)
+						}
 					>
 						<IoMdPersonAdd className="w-5 h-5 mr-2" /> Download
 						VCARD

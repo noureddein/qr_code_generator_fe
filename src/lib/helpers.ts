@@ -13,11 +13,14 @@ export const downloadPNG = (
 	link.click();
 };
 
-export const downloadVcfFile = (vcfText: BlobPart) => {
+export const downloadVcfFile = (
+	vcfText: BlobPart,
+	filename: string = "vcard.vcf"
+) => {
 	const element = document.createElement("a");
 	const file = new Blob([vcfText], { type: "text/vcard" });
 	element.href = URL.createObjectURL(file);
-	element.download = "myFile.vcf";
+	element.download = filename;
 	document.body.appendChild(element);
 	element.click();
 	document.body.removeChild(element);
