@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { URLQrData } from "./view.d";
+import { InfiniteSpinnerIcon } from "@components/Icons";
+import Container from "@components/Container";
 
 const URLView = ({ qrData }: { qrData: URLQrData }) => {
 	if (!qrData.url) {
@@ -12,8 +14,15 @@ const URLView = ({ qrData }: { qrData: URLQrData }) => {
 		window.location.href = qrData.url;
 	}, [qrData.url]);
 
-	// Optionally show a loading indicator or message while redirecting
-	return <div>Redirecting to the URL...</div>;
+	return (
+		<div className="flex items-center justify-center min-h-dvh bg-slate-100">
+			<Container>
+				<div className="flex items-center justify-center h-full ">
+					<InfiniteSpinnerIcon />
+				</div>
+			</Container>
+		</div>
+	);
 };
 
 export default URLView;
