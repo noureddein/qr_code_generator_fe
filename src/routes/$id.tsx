@@ -5,7 +5,6 @@ import { server } from "@lib/server";
 import { QRCodeTypes } from "@src/types.d";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import axios from "axios";
-import { Spinner } from "flowbite-react/components/Spinner";
 import { InfiniteSpinnerIcon } from "@components/Icons";
 
 export const Route = createFileRoute("/$id")({
