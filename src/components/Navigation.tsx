@@ -1,4 +1,3 @@
-// import { useAccessToken } from "@providers/AuthProvider";
 import Container from "./Container";
 import { Link } from "@tanstack/react-router";
 import useAuth from "@store/authStore";
@@ -32,14 +31,13 @@ const tabs: Tap[] = [
 ];
 
 const Navigation = () => {
-	// const { auth } = useAccessToken();
 	const user = useAuth((s) => s.user);
 	return (
 		<div>
 			<Container>
 				{user && (
 					<div className="px-2 pb-0">
-						<div className="flex gap-4 text-gray-300">
+						<div className="flex flex-wrap gap-4 text-gray-300">
 							{tabs.map((tab, idx) => (
 								<Tab key={idx} tab={tab} />
 							))}

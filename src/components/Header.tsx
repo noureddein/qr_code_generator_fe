@@ -79,7 +79,7 @@ const AuthButtons = () => {
 
 						<Link
 							to="/register"
-							className="px-4 py-2 font-normal text-white bg-green-400 rounded-md cursor-pointer text-md hover:text-gray-200"
+							className="px-4 py-2 font-normal text-white rounded-md cursor-pointer bg-emerald-800 text-md hover:text-gray-200"
 						>
 							Register
 						</Link>

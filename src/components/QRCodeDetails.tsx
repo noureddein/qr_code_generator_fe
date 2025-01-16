@@ -37,52 +37,59 @@ const QRCodeDetails = ({ row }: QRCodeDetailsProps) => {
 	} = row;
 
 	return (
-		<div className="flex flex-col items-center justify-between p-3 bg-white border border-gray-200 rounded-[3px] md:flex-row md:max-w-full hover:border hover:border-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-			<div className="flex flex-col justify-between leading-normal ps-3">
-				<Type type={type as QRCodeTypes} />
-				<h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 capitalize dark:text-white">
-					{qrData.name}
-				</h5>
-				<p className="mb-1 text-sm font-normal text-gray-400 hover:underline">
-					<a
-						href={publicLink}
-						target="_blank"
-						className="flex items-center gap-1"
-					>
-						<IoIosLink />
-						{publicLink}
-					</a>
-				</p>
+		<div className="grid grid-cols-12 gap-4 bg-white border border-gray-200 rounded-[3px] p-4 content-center hover:border hover:border-gray-700 ">
+			<div className="col-span-12 leading-normal md:col-span-4 ">
+				<div className="flex flex-col h-full justify-evenly">
+					<Type type={type as QRCodeTypes} />
+					<h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 capitalize break-all dark:text-white">
+						{qrData.name}
+					</h5>
+					<p className="mb-1 text-[11px] font-normal text-gray-400 hover:underline">
+						<a
+							href={publicLink}
+							target="_blank"
+							className="flex items-center gap-1"
+						>
+							<IoIosLink />
+							{publicLink}
+						</a>
+					</p>
+				</div>
 			</div>
 
-			<div className="flex flex-col justify-between leading-normal ps-3">
-				<table>
-					<tbody>
-						<tr className="text-sm text-gray-400">
-							<td className="">
-								<MdAccessTime />
-							</td>
-							<td className="">Created At:</td>
-							<td>{formatDate(createdAt)}</td>
-						</tr>
-						<tr className="text-sm text-gray-400">
-							<td className="">
-								<RxUpdate />
-							</td>
-							<td>Last update:</td>
-							<td>{formatDate(updatedAt)}</td>
-						</tr>
-					</tbody>
-				</table>
+			<div className="col-span-12 leading-normal md:col-span-4 ps-3">
+				<div className="flex flex-col items-start justify-center h-full md:items-center">
+					<table>
+						<tbody>
+							<tr className="text-sm text-gray-400">
+								<td className="">
+									<MdAccessTime />
+								</td>
+								<td className="">Created At:</td>
+								<td>{formatDate(createdAt)}</td>
+							</tr>
+							<tr className="text-sm text-gray-400">
+								<td className="">
+									<RxUpdate />
+								</td>
+								<td>Last update:</td>
+								<td>{formatDate(updatedAt)}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 
-			<div className="flex flex-row items-center gap-8">
+			<div className="col-span-12 md:col-span-2">
 				<img
-					className="object-cover w-full h-48 rounded-t-lg md:h-auto md:w-32 md:rounded-none md:rounded-s-lg"
+					className="w-full h-48 rounded-t-lg md:h-auto md:w-32 md:rounded-none md:rounded-s-lg size-14"
 					src={image}
 					alt=""
 				/>
-				<div className="flex flex-col gap-4">
+			</div>
+
+			<div className="col-span-12 md:col-span-1 ">
+				<div className="flex flex-col justify-center h-full">
 					<button
 						type="button"
 						className="focus:outline-none border border-green-400 hover:text-white bg-inherit hover:bg-green-600 text-green-700  font-medium rounded-[2px] text-sm px-5 py-2.5  mb-2"
@@ -159,7 +166,7 @@ const Status = ({ id, isActive }: { id: string; isActive: boolean }) => {
 
 const Type = ({ type }: { type: QRCodeTypes }) => {
 	const Wrapper = ({ children }: { children: React.ReactNode }) => (
-		<p className="flex items-baseline gap-1 mb-1 text-sm font-normal text-gray-400 uppercase">
+		<p className="flex items-baseline gap-1 mb-1 text-[11px] font-normal text-gray-400 uppercase">
 			{children} {type}
 		</p>
 	);

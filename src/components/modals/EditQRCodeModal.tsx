@@ -14,7 +14,7 @@ import {
 } from "@validation/qrCodeOptions";
 import { Button } from "flowbite-react/components/Button";
 import { Modal } from "flowbite-react/components/Modal";
-import ModalLoader from "./ModalLoader";
+import ModalLoader from "../loaders/ModalLoader";
 
 interface EditQRCodeModalProps {
 	id: string;
@@ -43,10 +43,11 @@ function EditQRCodeModal({ id, childrenButton }: EditQRCodeModalProps) {
 
 			<Modal show={open} size="4xl" onClose={onClose} popup>
 				<Modal.Header />
+
+				<Modal.Header>
+					<p className="text-2xl font-medium">Update Your Code</p>
+				</Modal.Header>
 				<Modal.Body>
-					<p className="text-2xl font-medium text-center">
-						Update Your Code
-					</p>
 					<div className="flex flex-col gap-2">
 						<ModalLoader isLoading={isPending}>
 							{data && (

@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useSaveQrCode from "@hooks/useSaveQrCode";
 import useUpdateQRCode from "@hooks/useUpdateQRCode";
 import { ErrorResponse, QRCodeTypes } from "@src/types.d";
-import { useQueryClient } from "@tanstack/react-query";
 import { TextFormDataTypes, textSchema } from "@validation/qrCodeOptions";
 import { Spinner } from "flowbite-react/components/Spinner";
 import { useForm } from "react-hook-form";
@@ -14,7 +13,6 @@ const TextForm = ({ data }: { data?: TextFormDataTypes }) => {
 		name: "",
 		text: "",
 	};
-	const queryClient = useQueryClient();
 
 	const {
 		mutate: saveQR,
@@ -68,9 +66,6 @@ const TextForm = ({ data }: { data?: TextFormDataTypes }) => {
 
 			{
 				onSuccess: async (res) => {
-					await queryClient.invalidateQueries({
-						queryKey: ["get_many_qr_codes"],
-					});
 					toast.success(res.message);
 				},
 				onError: (err) => {

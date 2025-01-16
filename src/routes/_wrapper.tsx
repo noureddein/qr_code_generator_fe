@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_wrapper")({
 
 function RouteComponent() {
 	return (
-		<div className="min-h-screen bg-green-600">
+		<div className="min-h-screen bg-green-700">
 			<Header />
 			<Navigation />
 			<Container>

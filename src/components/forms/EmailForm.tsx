@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useSaveQrCode, { MutationDataProps } from "@hooks/useSaveQrCode";
 import useUpdateQRCode from "@hooks/useUpdateQRCode";
 import { ErrorResponse, QRCodeTypes } from "@src/types.d";
-import { useQueryClient } from "@tanstack/react-query";
 import { EmailFormDataTypes, emailSchema } from "@validation/qrCodeOptions";
 import { Spinner } from "flowbite-react/components/Spinner";
 import { useForm } from "react-hook-form";
@@ -22,8 +21,6 @@ const EmailForm = ({ data }: { data?: EmailFormDataTypes }) => {
 		isError,
 		context,
 	} = useSaveQrCode();
-
-	const queryClient = useQueryClient();
 
 	const { mutate: updateQR, isPending: isUpdating } = useUpdateQRCode({
 		URL: `/api/qr-codes/email`,
@@ -77,9 +74,6 @@ const EmailForm = ({ data }: { data?: EmailFormDataTypes }) => {
 			{ data },
 			{
 				onSuccess: async (res) => {
-					await queryClient.invalidateQueries({
-						queryKey: ["get_many_qr_codes"],
-					});
 					toast.success(res.message);
 				},
 				onError: (err) => {

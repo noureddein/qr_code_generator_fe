@@ -7,7 +7,6 @@ import { Spinner } from "flowbite-react/components/Spinner";
 import { useForm } from "react-hook-form";
 import { ErrorResponse, QRCodeTypes } from "@src/types.d";
 import useUpdateQRCode from "@hooks/useUpdateQRCode";
-import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
@@ -28,7 +27,6 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 		country: "Jordan",
 		name: "Do Media QR code",
 	};
-	const queryClient = useQueryClient();
 
 	const {
 		mutate: saveQR,
@@ -85,9 +83,6 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 			{ data: { text, ...data } },
 			{
 				onSuccess: async (res) => {
-					await queryClient.invalidateQueries({
-						queryKey: ["get_many_qr_codes"],
-					});
 					toast.success(res.message);
 				},
 				onError: (err) => {

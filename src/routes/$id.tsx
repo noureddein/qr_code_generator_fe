@@ -6,6 +6,7 @@ import { QRCodeTypes } from "@src/types.d";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import axios from "axios";
 import { Spinner } from "flowbite-react/components/Spinner";
+import { InfiniteSpinnerIcon } from "@components/Icons";
 
 export const Route = createFileRoute("/$id")({
 	component: RouteComponent,
@@ -32,7 +33,7 @@ export const Route = createFileRoute("/$id")({
 			<div className="flex items-center justify-center min-h-dvh bg-slate-400">
 				<Container>
 					<div className="flex items-center justify-center h-full ">
-						<Spinner aria-label="Wait qr data" size="xl" />
+						<InfiniteSpinnerIcon />
 					</div>
 				</Container>
 			</div>

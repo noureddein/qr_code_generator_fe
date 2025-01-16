@@ -10,7 +10,7 @@ import QRImageResizer from "@components/QRImageRsieer";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Spinner } from "flowbite-react/components/Spinner";
-import ModalLoader from "./ModalLoader";
+import ModalLoader from "../loaders/ModalLoader";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface EditQRCodeModalProps {

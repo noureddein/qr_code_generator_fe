@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useLayoutEffect } from "react";
 import Container from "@components/Container";
 
-const router = createRouter({
+export const router = createRouter({
 	routeTree,
 	context: { apis: undefined!, accessToken: undefined! },
 	defaultNotFoundComponent: () => {
