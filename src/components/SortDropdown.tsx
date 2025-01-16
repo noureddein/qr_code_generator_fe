@@ -16,9 +16,9 @@ const SortDropdown = () => {
 
 	const sortLabel = SORT_LABEL[sortKey];
 
-	const handleSort = (value: Sort) => {
+	const handleSort = async (value: Sort) => {
 		if (isValidSortKey(value)) {
-			navigate({
+			await navigate({
 				search: (old) => ({
 					...old,
 					...(value && { sort: value }),
@@ -27,7 +27,7 @@ const SortDropdown = () => {
 				params: true,
 			});
 		} else {
-			navigate({
+			await navigate({
 				search: (old) => ({
 					...old,
 					sort: "",

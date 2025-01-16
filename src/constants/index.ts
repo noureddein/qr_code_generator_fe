@@ -1,3 +1,5 @@
+import { QRCodeTypes } from "@src/types.d";
+
 export const defaultQROpts = {
 	colorLight: "#ffffff",
 	colorDark: "#000000",
@@ -16,4 +18,12 @@ export const SORT_LABEL = {
 	[Sort.LAST_CREATED]: "Last Created",
 	[Sort.NAME_ASC]: "Name (A-Z)",
 	[Sort.NAME_DESC]: "Name (Z-A)",
+};
+
+export const FILTER_LABEL = {
+	all: "All",
+	[QRCodeTypes.EMAIL]: "Email",
+	[QRCodeTypes.TEXT]: "Text",
+	[QRCodeTypes.URL]: "URL",
+	[QRCodeTypes.VCARD]: "vCard",
 };

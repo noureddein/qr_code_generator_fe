@@ -13,6 +13,7 @@ import { z } from "zod";
 import SortDropdown, { isValidSortKey } from "@components/SortDropdown";
 import { Sort } from "@src/constants";
 import QrCardLoader from "@components/loaders/QrCardLoader";
+import FilterDropdown, { isValidFilterKey } from "@components/FilterDropdown";
 
 export const Route = createFileRoute("/_wrapper/_authenticated/my-codes")({
 	component: RouteComponent,
@@ -22,6 +23,7 @@ export const Route = createFileRoute("/_wrapper/_authenticated/my-codes")({
 			.object({
 				query: z.string().optional(),
 				sort: z.string().optional(),
+				type: z.string().optional(),
 			})
 			.parse(search),
 });
@@ -48,7 +50,14 @@ function RouteComponent() {
 		{ rows: ResponseRow[] },
 		AxiosError,
 		{ rows: ResponseRow[] },
-		[string, { q: string | undefined; sort: string | undefined }]
+		[
+			string,
+			{
+				q: string | undefined;
+				sort: string | undefined;
+				type: string | undefined;
+			},
+		]
 	>({
 		queryFn: async ({ signal, queryKey }) => {
 			try {
@@ -61,6 +70,7 @@ function RouteComponent() {
 						sort: isValidSortKey(search.sort)
 							? search.sort
 							: Sort.LAST_CREATED,
+						type: isValidFilterKey(search.type) ? search.type : "",
 					},
 				});
 
@@ -69,7 +79,10 @@ function RouteComponent() {
 				throw error;
 			}
 		},
-		queryKey: ["get_many_qr_codes", { q: search.query, sort: search.sort }],
+		queryKey: [
+			"get_many_qr_codes",
+			{ q: search.query, sort: search.sort, type: search.type },
+		],
 	});
 
 	if (isError) {
@@ -79,6 +92,7 @@ function RouteComponent() {
 	return (
 		<>
 			<div className="flex flex-col justify-end gap-2 mb-5 md:flex-row">
+				<FilterDropdown />
 				<SortDropdown />
 				<SearchInput />
 			</div>

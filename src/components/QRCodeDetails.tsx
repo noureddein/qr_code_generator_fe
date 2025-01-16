@@ -38,7 +38,7 @@ const QRCodeDetails = ({ row }: QRCodeDetailsProps) => {
 
 	return (
 		<div className="grid grid-cols-12 gap-4 bg-white border border-gray-200 rounded-[3px] p-4 content-center hover:border hover:border-gray-700 ">
-			<div className="col-span-12 leading-normal md:col-span-4 ">
+			<div className="col-span-12 leading-normal md:col-span-6 lg:col-span-4">
 				<div className="flex flex-col h-full justify-evenly">
 					<Type type={type as QRCodeTypes} />
 					<h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 capitalize break-all dark:text-white">
@@ -57,7 +57,7 @@ const QRCodeDetails = ({ row }: QRCodeDetailsProps) => {
 				</div>
 			</div>
 
-			<div className="col-span-12 leading-normal md:col-span-4 ps-3">
+			<div className="col-span-12 leading-normal md:col-span-6 lg:col-span-4 ps-3">
 				<div className="flex flex-col items-start justify-center h-full md:items-center">
 					<table>
 						<tbody>
@@ -80,15 +80,15 @@ const QRCodeDetails = ({ row }: QRCodeDetailsProps) => {
 				</div>
 			</div>
 
-			<div className="col-span-12 md:col-span-2">
+			<div className="col-span-12 md:col-span-6 lg:col-span-2 ">
 				<img
-					className="w-full h-48 rounded-t-lg md:h-auto md:w-32 md:rounded-none md:rounded-s-lg size-14"
+					className="mx-auto rounded-t-lg md:ms-0 md:h-auto md:w-32 md:rounded-none size-64"
 					src={image}
 					alt=""
 				/>
 			</div>
 
-			<div className="col-span-12 md:col-span-1 ">
+			<div className="col-span-12 md:col-span-6 lg:col-span-2">
 				<div className="flex flex-col justify-center h-full">
 					<button
 						type="button"
