@@ -55,10 +55,10 @@ const useAPIs = () => {
 		}
 	}
 
-	const deleteQRCode = async (id: string): Promise<AxiosResponse> => {
+	const deleteQRCode = async (ids: string[]): Promise<AxiosResponse> => {
 		try {
-			const URL = `/api/qr-codes/${id}`;
-			const result = await privateServer.delete(URL);
+			const URL = `/api/qr-codes/delete/bulk`;
+			const result = await privateServer.post(URL, { ids });
 			return result;
 		} catch (error) {
 			throw error;

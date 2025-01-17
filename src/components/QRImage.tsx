@@ -1,6 +1,6 @@
 import ImageOverlay from "./ImageOverlay";
 
-const PLACEHOLDER_IMAGE = "./src/assets/qr-code.png";
+export const PLACEHOLDER_IMAGE = "./src/assets/qr-code.png";
 
 interface QRImageProps {
 	isLoading: boolean;

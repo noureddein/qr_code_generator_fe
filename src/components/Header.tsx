@@ -1,13 +1,14 @@
-import Container from "./Container";
-import { Link } from "@tanstack/react-router";
-import { useMutation } from "@tanstack/react-query";
-import { Spinner } from "flowbite-react/components/Spinner";
 import useAPIs from "@hooks/useAPIs";
 import useAuth from "@store/authStore";
+import { useMutation } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
+import { Spinner } from "flowbite-react/components/Spinner";
+import Container from "./Container";
+import CustomLink from "./CustomLink";
 
 const Header = () => {
 	return (
-		<header>
+		<header className="bg-green-700 shadow-lg ">
 			<Container>
 				<div className="flex items-center justify-between">
 					<Link to="/url">
@@ -39,28 +40,17 @@ const AuthButtons = () => {
 	return (
 		<>
 			{user && (
-				<div className="flex gap-3">
-					<Link
-						to="/my-codes"
-						className="font-normal text-white cursor-pointer text-md"
-						activeProps={{
-							className:
-								"font-bold text-white text-white relative after:absolute after:inset-x-0 after:-bottom-3 after:h-[2px] after:bg-slate-200",
-						}}
-					>
-						My QR Codes
-					</Link>
-
-					<Link
-						to="/profile"
-						className="font-normal text-white cursor-pointer text-md"
-						activeProps={{
-							className:
-								"font-bold text-white text-white relative after:absolute after:inset-x-0 after:-bottom-3 after:h-[2px] after:bg-slate-200",
-						}}
-					>
-						Profile
-					</Link>
+				<div className="flex gap-x-5">
+					<CustomLink
+						path="/my-codes"
+						tabName="My QR Codes"
+						className="text-md "
+					/>
+					<CustomLink
+						path="/profile"
+						tabName="Profile"
+						className="text-md "
+					/>
 				</div>
 			)}
 			<div className="flex items-center gap-4">

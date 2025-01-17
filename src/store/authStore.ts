@@ -1,4 +1,4 @@
-import { User } from "@src/types";
+import { User } from "@src/types.d";
 import { create } from "zustand";
 
 interface StoreState {

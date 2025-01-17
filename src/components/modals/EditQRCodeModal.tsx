@@ -42,8 +42,6 @@ function EditQRCodeModal({ id, childrenButton }: EditQRCodeModalProps) {
 			)}
 
 			<Modal show={open} size="4xl" onClose={onClose} popup>
-				<Modal.Header />
-
 				<Modal.Header>
 					<p className="text-2xl font-medium">Update Your Code</p>
 				</Modal.Header>

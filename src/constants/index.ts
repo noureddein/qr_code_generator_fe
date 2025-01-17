@@ -8,6 +8,11 @@ export const defaultQROpts = {
 	size: 1000,
 };
 
+export const Status = {
+	ACTIVE: true,
+	IN_ACTIVE: false,
+};
+
 export enum Sort {
 	LAST_CREATED = "last_created",
 	NAME_ASC = "name_asc",

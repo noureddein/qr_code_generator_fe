@@ -1,46 +1,25 @@
+import { ActiveIcon, DeactivateIcon } from "@components/Icons";
+import useDiscloser from "@hooks/useDiscloser";
+import useUpdateActivation from "@hooks/useUpdateActivation";
+import { Status as StatusType } from "@src/constants";
 import { Button } from "flowbite-react/components/Button";
 import { Modal } from "flowbite-react/components/Modal";
-import useDiscloser from "@hooks/useDiscloser";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Spinner } from "flowbite-react/components/Spinner";
-import useAPIs from "@hooks/useAPIs";
-import toast from "react-hot-toast";
-import axios from "axios";
-import { DeleteIcon } from "@components/Icons";
 
 interface DeleteModalProps {
-	id: string[];
+	ids: string[];
 	childrenButton?:
 		| React.ReactNode
 		| ((onOpen: () => void) => React.ReactNode);
-	qrName?: string;
+	status: boolean;
 }
 
-function DeleteModal({ id, childrenButton, qrName }: DeleteModalProps) {
-	const queryClient = useQueryClient();
-	const { deleteQRCode } = useAPIs();
+function ActivationModal({ ids, status, childrenButton }: DeleteModalProps) {
 	const { onClose, onOpen, open } = useDiscloser();
-
-	const { mutate, isPending } = useMutation({
-		mutationFn: deleteQRCode,
-		onSuccess: async (res) => {
-			await queryClient.invalidateQueries({
-				queryKey: ["get_many_qr_codes"],
-			});
-			toast.success(res.data.message);
-		},
-		onError: (err) => {
-			console.log(err);
-			if (axios.isAxiosError(err)) {
-				toast.error(
-					err.response?.data?.message || `Error while deleting.`
-				);
-			}
-		},
-	});
+	const { mutate, isPending } = useUpdateActivation();
 
 	const onDeleteQR = async () => {
-		mutate(id);
+		mutate({ ids, status });
 	};
 	return (
 		<>
@@ -56,14 +35,15 @@ function DeleteModal({ id, childrenButton, qrName }: DeleteModalProps) {
 				<Modal.Header />
 				<Modal.Body>
 					<div className="text-center">
-						<DeleteIcon className="mx-auto mb-4 text-red-600 h-14 w-14 dark:text-gray-200" />
-						<h2 className="mb-5 text-2xl font-medium text-gray-700 capitalize">
-							{qrName}
-						</h2>
+						{status === StatusType.ACTIVE ? (
+							<ActiveIcon className="mx-auto mb-4 text-green-600 h-14 w-14 dark:text-gray-200" />
+						) : (
+							<DeactivateIcon className="mx-auto mb-4 text-red-600 h-14 w-14 dark:text-gray-200" />
+						)}
 						<h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-							{id.length > 1
-								? "Are you sure you want to delete all selected QR codes?"
-								: "Are you sure you want to delete this QR Code?"}
+							{status === StatusType.ACTIVE
+								? "Are you sure you want to activate selected QR codes?"
+								: "Are you sure you want to deactivate selected QR codes?"}
 						</h3>
 						<div className="flex justify-center gap-4">
 							<Button
@@ -92,4 +72,4 @@ function DeleteModal({ id, childrenButton, qrName }: DeleteModalProps) {
 	);
 }
 
-export default DeleteModal;
+export default ActivationModal;

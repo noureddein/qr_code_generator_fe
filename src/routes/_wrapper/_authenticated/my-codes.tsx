@@ -14,10 +14,12 @@ import SortDropdown, { isValidSortKey } from "@components/SortDropdown";
 import { Sort } from "@src/constants";
 import QrCardLoader from "@components/loaders/QrCardLoader";
 import FilterDropdown, { isValidFilterKey } from "@components/FilterDropdown";
+import useBulkUpdate from "@store/bulkUpdate";
+import BulkUpdateDropdown from "@components/BulkUpdateDropdown";
+import { Badge } from "flowbite-react/components/Badge";
 
 export const Route = createFileRoute("/_wrapper/_authenticated/my-codes")({
 	component: RouteComponent,
-
 	validateSearch: (search) =>
 		z
 			.object({
@@ -45,6 +47,8 @@ export interface ResponseRow {
 function RouteComponent() {
 	const privateServer = usePrivateServer();
 	const search = useSearch({ from: "/_wrapper/_authenticated/my-codes" });
+	const totalSelected = useBulkUpdate((s) => s.totalSelected);
+	const resetBulkUpdate = useBulkUpdate((s) => s.resetBulkUpdate);
 
 	const { data, isPending, isError } = useQuery<
 		{ rows: ResponseRow[] },
@@ -73,7 +77,7 @@ function RouteComponent() {
 						type: isValidFilterKey(search.type) ? search.type : "",
 					},
 				});
-
+				resetBulkUpdate();
 				return result.data;
 			} catch (error) {
 				throw error;
@@ -88,20 +92,34 @@ function RouteComponent() {
 	if (isError) {
 		return <p>Something went wrong </p>;
 	}
-
+	const allIds = data?.rows.map((row) => row._id) || [];
 	return (
 		<>
-			<div className="flex flex-col justify-end gap-2 mb-5 md:flex-row">
-				<FilterDropdown />
-				<SortDropdown />
-				<SearchInput />
+			<div className="flex flex-row items-center justify-between mb-5">
+				{totalSelected > 0 && (
+					<div className="flex items-center gap-2 text-white">
+						<BulkUpdateDropdown allIds={allIds} />
+						<Badge color="gray">{totalSelected}</Badge>
+					</div>
+				)}
+				<div className="flex flex-col items-center justify-center gap-2 md:flex-row md:items-center md:justify-center md:ml-auto">
+					<FilterDropdown />
+					<SortDropdown />
+					<SearchInput />
+				</div>
 			</div>
 
 			<QrCardLoader isLoading={isPending}>
 				<div className="flex flex-col gap-4">
-					{data?.rows.map((row) => (
-						<QRCodeDetails row={row} key={row._id} />
-					))}
+					{allIds.length ? (
+						data?.rows.map((row) => (
+							<QRCodeDetails row={row} key={row._id} />
+						))
+					) : (
+						<div className="text-lg font-medium text-white">
+							No QR codes found, Create your first one
+						</div>
+					)}
 				</div>
 			</QrCardLoader>
 		</>

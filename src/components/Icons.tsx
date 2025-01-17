@@ -1,4 +1,4 @@
-export const Global = (props: React.DOMAttributes<SVGSVGElement>) => {
+export const Global = (props: React.SVGProps<SVGSVGElement>) => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -12,7 +12,7 @@ export const Global = (props: React.DOMAttributes<SVGSVGElement>) => {
 	);
 };
 
-export const LinkIcon = (props: React.DOMAttributes<SVGSVGElement>) => {
+export const LinkIcon = (props: React.SVGProps<SVGSVGElement>) => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -30,7 +30,7 @@ export const LinkIcon = (props: React.DOMAttributes<SVGSVGElement>) => {
 	);
 };
 
-export const PaintIcon = (props: React.DOMAttributes<SVGSVGElement>) => {
+export const PaintIcon = (props: React.SVGProps<SVGSVGElement>) => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +48,7 @@ export const PaintIcon = (props: React.DOMAttributes<SVGSVGElement>) => {
 	);
 };
 
-export const EditIcon = (props: React.DOMAttributes<SVGSVGElement>) => {
+export const EditIcon = (props: React.SVGProps<SVGSVGElement>) => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -63,7 +63,7 @@ export const EditIcon = (props: React.DOMAttributes<SVGSVGElement>) => {
 	);
 };
 
-export const DotsIcon = (props: React.DOMAttributes<SVGSVGElement>) => {
+export const DotsIcon = (props: React.SVGProps<SVGSVGElement>) => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +77,7 @@ export const DotsIcon = (props: React.DOMAttributes<SVGSVGElement>) => {
 	);
 };
 
-export const DeleteIcon = (props: React.DOMAttributes<SVGSVGElement>) => {
+export const DeleteIcon = (props: React.SVGProps<SVGSVGElement>) => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -95,7 +95,7 @@ export const DeleteIcon = (props: React.DOMAttributes<SVGSVGElement>) => {
 	);
 };
 
-export const DeactivateIcon = (props: React.DOMAttributes<SVGSVGElement>) => {
+export const DeactivateIcon = (props: React.SVGProps<SVGSVGElement>) => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -111,7 +111,7 @@ export const DeactivateIcon = (props: React.DOMAttributes<SVGSVGElement>) => {
 	);
 };
 
-export const ActiveIcon = (props: React.DOMAttributes<SVGSVGElement>) => {
+export const ActiveIcon = (props: React.SVGProps<SVGSVGElement>) => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -130,9 +130,7 @@ export const ActiveIcon = (props: React.DOMAttributes<SVGSVGElement>) => {
 	);
 };
 
-export const InfiniteSpinnerIcon = (
-	props: React.DOMAttributes<SVGSVGElement>
-) => {
+export const InfiniteSpinnerIcon = (props: React.SVGProps<SVGSVGElement>) => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"

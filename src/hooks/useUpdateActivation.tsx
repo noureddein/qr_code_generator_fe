@@ -2,29 +2,37 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import usePrivateServer from "./usePrivateServer";
 import { AxiosError, AxiosResponse } from "axios";
 import { ErrorResponse } from "@src/types.d";
-import { useSearch } from "@tanstack/react-router";
+import toast from "react-hot-toast";
 
-const useUpdateActivation = ({ id }: { id: string }) => {
+export interface MutationDataProps {
+	ids: string[];
+	status: boolean;
+}
+
+const useUpdateActivation = () => {
 	const privateServer = usePrivateServer();
 	const queryClient = useQueryClient();
-	const search = useSearch({ from: "/_wrapper/_authenticated/my-codes" });
+
 	return useMutation<
 		AxiosResponse,
-		AxiosError<{ message: string } | ErrorResponse>
+		AxiosError<{ message: string } | ErrorResponse>,
+		MutationDataProps
 	>({
-		mutationFn: async () => {
-			const URL = `/api/qr-codes/activation/${id}`;
+		mutationFn: async (data) => {
+			const URL = `/api/qr-codes/activation`;
 
-			const result = await privateServer.put<AxiosResponse>(URL);
+			const result = await privateServer.put<AxiosResponse>(URL, data);
 			return result.data;
 		},
-		onSuccess: async () => {
+		onSuccess: async (res) => {
+			console.log(res);
 			await queryClient.invalidateQueries({
 				queryKey: ["get_many_qr_codes"],
 			});
-			await queryClient.invalidateQueries({
-				queryKey: ["get_many_qr_codes", { ...search }],
-			});
+		},
+		onError: (err) => {
+			toast.error(err.response?.data.message as string);
+			console.log(err);
 		},
 	});
 };
