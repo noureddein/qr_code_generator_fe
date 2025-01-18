@@ -129,16 +129,12 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 		} else {
 			data.image = undefined;
 		}
-		// Debugging: View `FormData` contents
-		// for (let pair of formData.entries()) {
-		// 	console.log(pair[0], pair[1]);
-		// }
-		// console.log(JSON.stringify(formData));
-		// if (initialValues.id) {
-		// 	onUpdate(data);
-		// } else {
-		onSave(data);
-		// }
+
+		if (initialValues.id) {
+			onUpdate(data);
+		} else {
+			onSave(data);
+		}
 	};
 
 	return (
