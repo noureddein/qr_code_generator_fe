@@ -35,6 +35,12 @@ export const createVCard = (vCardData: vCardFormDataTypes) => {
 	const vCard = vCardsJS();
 
 	vCard.firstName = vCardData.firstName;
+	if (vCardData.imageBase64 && vCardData.imageType) {
+		vCard.photo.embedFromString(
+			vCardData.imageBase64.split(",")[1],
+			vCardData.imageType
+		);
+	}
 	vCard.lastName = vCardData.lastName;
 	vCard.organization = vCardData.organization;
 	vCard.title = vCardData.position;
@@ -71,4 +77,53 @@ export const formatDate = (date: Date) => {
 		console.log(error);
 		return "";
 	}
+};
+
+// Helper function to get image dimensions
+export const getImageDimensions = (
+	file: File
+): Promise<{ width: number; height: number }> => {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = (e) => {
+			const img = new Image();
+			img.onload = () =>
+				resolve({ width: img.width, height: img.height });
+			img.onerror = reject;
+			if (e.target?.result) {
+				img.src = e.target.result as string;
+			}
+		};
+		reader.onerror = reject;
+		reader.readAsDataURL(file);
+	});
+};
+
+export type vCardImageType = "image/png" | "image/jpg";
+
+type fileToBase64Response = {
+	base64: string;
+	type: vCardImageType;
+};
+
+export const fileToBase64 = (file: File): Promise<fileToBase64Response> => {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+
+		reader.onload = () => {
+			if (reader.result) {
+				resolve({
+					base64: reader.result as string,
+					type: file.type as vCardImageType,
+				});
+			} else {
+				reject({ base64: null, type: null });
+			}
+		};
+
+		reader.onerror = (error) => {
+			reject(error);
+		};
+	});
 };

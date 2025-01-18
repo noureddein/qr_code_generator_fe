@@ -24,6 +24,7 @@ export interface VCardQrData {
 	city: string;
 	state: string;
 	country: string;
+	imageBase64: string;
 }
 
 export interface URLProps {

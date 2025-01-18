@@ -6,6 +6,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 import { TbBriefcase2Filled } from "react-icons/tb";
 import { VCardQrData } from "./view.d";
+import { twMerge } from "tailwind-merge";
 
 interface VCardProps {
 	qrData: VCardQrData;
@@ -28,6 +29,7 @@ const VCardView = ({ qrData }: VCardProps) => {
 		country,
 		fax,
 		text,
+		imageBase64,
 		// name,
 	} = qrData;
 
@@ -36,7 +38,18 @@ const VCardView = ({ qrData }: VCardProps) => {
 			<div className="relative pt-12 bg-gradient-to-r from-cyan-500 to-blue-500">
 				<div className="w-full mx-auto shadow-2xl md:w-2/3 lg:w-1/3">
 					<div className="flex flex-col items-center gap-4 p-2 py-8">
-						<div className="w-32 h-32 rounded-full bg-slate-600" />
+						<div
+							className={twMerge(
+								"w-40 h-40 overflow-hidden rounded-full ",
+								!!imageBase64
+									? "bg-transparent"
+									: "bg-slate-600"
+							)}
+						>
+							{!!imageBase64 && (
+								<img src={imageBase64} alt="logo" />
+							)}
+						</div>
 						<p className="m-0 text-white text-md">{`${firstName} ${lastName}`}</p>
 						<p className="m-0 text-sm font-light text-white">{`${position}`}</p>
 					</div>

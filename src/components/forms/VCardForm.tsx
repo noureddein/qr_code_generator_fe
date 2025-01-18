@@ -1,12 +1,13 @@
 import Input from "@components/Input";
+import UploadImage from "@components/UploadImage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useSaveQrCode from "@hooks/useSaveQrCode";
-import { createVCard } from "@lib/helpers";
+import useUpdateQRCode from "@hooks/useUpdateQRCode";
+import { createVCard, fileToBase64 } from "@lib/helpers";
+import { ErrorResponse, QRCodeTypes } from "@src/types.d";
 import { vCardFormDataTypes, vCardSchema } from "@validation/qrCodeOptions";
 import { Spinner } from "flowbite-react/components/Spinner";
 import { useForm } from "react-hook-form";
-import { ErrorResponse, QRCodeTypes } from "@src/types.d";
-import useUpdateQRCode from "@hooks/useUpdateQRCode";
 import toast from "react-hot-toast";
 
 const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
@@ -26,6 +27,8 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 		state: "Amman Gov",
 		country: "Jordan",
 		name: "Do Media QR code",
+		imageType: "",
+		imageBase64: "",
 	};
 
 	const {
@@ -45,11 +48,11 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 		formState: { errors, isValid },
 		setError,
 		reset,
+		setValue,
 	} = useForm<vCardFormDataTypes>({
 		resolver: zodResolver(vCardSchema),
 		defaultValues: initialValues,
 	});
-
 	const onSave = async (data: vCardFormDataTypes) => {
 		const vCard = createVCard(data);
 		const dataToSave = {
@@ -59,6 +62,21 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 			},
 			type: QRCodeTypes.VCARD,
 		};
+		console.log({ dataToSave });
+		// const formData = new FormData();
+		// const keys = Object.keys(dataToSave.qrData);
+
+		// keys.forEach((key) => {
+		// 	if (key === "image") {
+		// 		const value = dataToSave.qrData.image?.[0] || undefined;
+		// 		formData.append(key, value as string | Blob);
+		// 	} else {
+		// 		const value =
+		// 			dataToSave.qrData[key as keyof vCardFormDataTypes];
+		// 		formData.append(key, value as string | Blob);
+		// 	}
+		// });
+		// formData.append("type", QRCodeTypes.VCARD);
 		saveQR(dataToSave, {
 			onSuccess: (res) => {
 				toast.success(res.data.message);
@@ -103,16 +121,28 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 		);
 	};
 
-	const onSubmit = (data: vCardFormDataTypes) => {
-		if (initialValues.id) {
-			onUpdate(data);
+	const onSubmit = async (data: vCardFormDataTypes) => {
+		if (data.image?.[0]) {
+			const convertResult = await fileToBase64(data.image[0]);
+			data.imageBase64 = convertResult.base64;
+			data.imageType = convertResult.type;
 		} else {
-			onSave(data);
+			data.image = undefined;
 		}
+		// Debugging: View `FormData` contents
+		// for (let pair of formData.entries()) {
+		// 	console.log(pair[0], pair[1]);
+		// }
+		// console.log(JSON.stringify(formData));
+		// if (initialValues.id) {
+		// 	onUpdate(data);
+		// } else {
+		onSave(data);
+		// }
 	};
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
+		<form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
 			<div className="flex">
 				<div className="flex-auto w-full p-4">
 					<Input
@@ -143,6 +173,14 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 							inputProps={{
 								placeholder: "Last name",
 							}}
+						/>
+
+						<UploadImage
+							errors={errors}
+							id="image"
+							label="Upload Image"
+							register={register}
+							setValue={setValue}
 						/>
 
 						<Input

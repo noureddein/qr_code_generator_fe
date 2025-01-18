@@ -1,3 +1,4 @@
+import { getImageDimensions } from "@lib/helpers";
 import { z } from "zod";
 
 // Shared Schema Components
@@ -29,6 +30,9 @@ export const emailSchema = defaultOptions.extend({
 	subject: z.string().nonempty("Subject cannot be empty."),
 	message: z.string().nonempty("Message cannot be empty."),
 });
+
+const MIN_WIDTH = 400; // Minimum width in pixels
+const MIN_HEIGHT = 400;
 
 export const vCardSchema = defaultOptions.extend({
 	id: z.string().optional(),
@@ -68,6 +72,51 @@ export const vCardSchema = defaultOptions.extend({
 	city: z.string(),
 	state: z.string(),
 	country: z.string(),
+	image: z
+		.instanceof(FileList)
+		.refine(
+			(file) => {
+				if (file.length > 0) {
+					return file[0] && file[0].size <= 2 * 1024 * 1024;
+				}
+				return true; // To make file optional
+			},
+			{
+				message: "File size must be less than 2MB",
+			}
+		)
+		.refine(
+			(file) => {
+				if (file.length > 0) {
+					console.log("here");
+					return /\.(jpeg|jpg|png|gif|svg)$/i.test(file[0].name);
+				}
+				return true; // To make file optional
+			},
+			{
+				message:
+					"File must have a valid extension (jpeg, jpg, png, gif, svg).",
+			}
+		)
+		.refine(
+			async (files) => {
+				const file = files[0];
+				if (!file) return true;
+
+				const img = await getImageDimensions(file);
+				const isSquare = img.width === img.height;
+				if (isSquare && img.height <= 400) {
+					return true;
+				}
+				return false;
+			},
+			{
+				message: `Image must be square, and max ${MIN_WIDTH}x${MIN_HEIGHT}px.`,
+			}
+		)
+		.optional(),
+	imageBase64: z.string().optional(),
+	imageType: z.string().optional(),
 });
 
 export const textSchema = defaultOptions.extend({

@@ -10,12 +10,14 @@ import { AxiosError, AxiosResponse } from "axios";
 import { ErrorResponse, QRCodeTypes } from "@src/types.d";
 
 export interface MutationDataProps {
-	qrData: (
+	qrData: {
+		text: string;
+	} & (
 		| URLFormDataTypes
 		| vCardFormDataTypes
 		| EmailFormDataTypes
 		| TextFormDataTypes
-	) & { text: string };
+	);
 	type: QRCodeTypes;
 }
 
@@ -28,14 +30,15 @@ const useSaveQrCode = () => {
 	return useMutation<
 		AxiosResponse,
 		AxiosError<ErrorResponse>,
-		MutationDataProps,
+		MutationDataProps | FormData,
 		MutationContext
 	>({
-		mutationFn: async (data: MutationDataProps) => {
+		mutationFn: async (data: MutationDataProps | FormData) => {
 			try {
 				const URL = "/api/qr-codes/save";
-				const response = await privateServer.post(URL, data);
 
+				// Send the appropriate payload
+				const response = await privateServer.post(URL, data);
 				return response;
 			} catch (error) {
 				throw error;

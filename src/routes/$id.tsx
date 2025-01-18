@@ -29,7 +29,7 @@ export const Route = createFileRoute("/$id")({
 	},
 	pendingComponent: () => {
 		return (
-			<div className="flex items-center justify-center min-h-dvh bg-slate-400">
+			<div className="flex items-center justify-center min-h-dvh bg-slat-400">
 				<Container>
 					<div className="flex items-center justify-center h-full ">
 						<InfiniteSpinnerIcon />
