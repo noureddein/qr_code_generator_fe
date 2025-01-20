@@ -24,6 +24,7 @@ import QRCodeZoom from "./modals/QRCodeZoom";
 import { Checkbox } from "flowbite-react";
 import useBulkUpdate from "@store/bulkUpdate";
 import { Status as StatusType } from "@src/constants";
+import { FaRegFilePdf } from "react-icons/fa";
 
 interface QRCodeDetailsProps {
 	row: ResponseRow;
@@ -218,6 +219,13 @@ const Type = ({ type }: { type: QRCodeTypes }) => {
 			return (
 				<Wrapper>
 					<BsPersonVcard />
+				</Wrapper>
+			);
+
+		case QRCodeTypes.PDF:
+			return (
+				<Wrapper>
+					<FaRegFilePdf />
 				</Wrapper>
 			);
 

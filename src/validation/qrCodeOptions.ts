@@ -1,6 +1,9 @@
 import { getImageDimensions } from "@lib/helpers";
 import { z } from "zod";
 
+const MIN_WIDTH = 400; // Minimum width in pixels
+const MIN_HEIGHT = 400;
+const MAX_IMAGE_SIZE = 300 * 1024; //300KB
 // Shared Schema Components
 export const qrCodeOptions = z.object({
 	colorDark: z.string(),
@@ -30,9 +33,6 @@ export const emailSchema = defaultOptions.extend({
 	subject: z.string().nonempty("Subject cannot be empty."),
 	message: z.string().nonempty("Message cannot be empty."),
 });
-
-const MIN_WIDTH = 400; // Minimum width in pixels
-const MIN_HEIGHT = 400;
 
 export const vCardSchema = defaultOptions.extend({
 	id: z.string().optional(),
@@ -77,25 +77,23 @@ export const vCardSchema = defaultOptions.extend({
 		.refine(
 			(file) => {
 				if (file.length > 0) {
-					return file[0] && file[0].size <= 2 * 1024 * 1024;
+					return file[0] && file[0].size <= MAX_IMAGE_SIZE;
 				}
 				return true; // To make file optional
 			},
 			{
-				message: "File size must be less than 2MB",
+				message: "File size must be less than 300KB",
 			}
 		)
 		.refine(
 			(file) => {
 				if (file.length > 0) {
-					console.log("here");
-					return /\.(jpeg|jpg|png|gif|svg)$/i.test(file[0].name);
+					return /\.(jpg|png|svg)$/i.test(file[0].name);
 				}
 				return true; // To make file optional
 			},
 			{
-				message:
-					"File must have a valid extension (jpeg, jpg, png, gif, svg).",
+				message: "File must have a valid extension (jpg, png, svg).",
 			}
 		)
 		.refine(
@@ -123,9 +121,15 @@ export const textSchema = defaultOptions.extend({
 	text: z.string(),
 });
 
+export const PDFSchema = defaultOptions.extend({
+	file: z.instanceof(FileList).optional(),
+});
+
 export type URLFormDataTypes = z.infer<typeof urlSchema>;
 export type EmailFormDataTypes = z.infer<typeof emailSchema>;
 export type vCardFormDataTypes = z.infer<typeof vCardSchema>;
 export type TextFormDataTypes = z.infer<typeof textSchema>;
+export type PDFFormDataTypes = z.infer<typeof PDFSchema>;
 export type QRCodeOptionsTypes = z.infer<typeof qrCodeOptions>;
+
 export type QRDataToSubmit = { text: string } & QRCodeOptionsTypes;

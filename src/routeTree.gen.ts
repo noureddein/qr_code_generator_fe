@@ -22,6 +22,7 @@ import { Route as WrapperAuthenticatedImport } from './routes/_wrapper/_authenti
 import { Route as WrapperAuthenticatedVcardImport } from './routes/_wrapper/_authenticated/vcard'
 import { Route as WrapperAuthenticatedUrlImport } from './routes/_wrapper/_authenticated/url'
 import { Route as WrapperAuthenticatedTextImport } from './routes/_wrapper/_authenticated/text'
+import { Route as WrapperAuthenticatedPdfImport } from './routes/_wrapper/_authenticated/pdf'
 import { Route as WrapperAuthenticatedMyCodesImport } from './routes/_wrapper/_authenticated/my-codes'
 import { Route as WrapperAuthenticatedEmailImport } from './routes/_wrapper/_authenticated/email'
 
@@ -93,6 +94,12 @@ const WrapperAuthenticatedUrlRoute = WrapperAuthenticatedUrlImport.update({
 const WrapperAuthenticatedTextRoute = WrapperAuthenticatedTextImport.update({
   id: '/text',
   path: '/text',
+  getParentRoute: () => WrapperAuthenticatedRoute,
+} as any)
+
+const WrapperAuthenticatedPdfRoute = WrapperAuthenticatedPdfImport.update({
+  id: '/pdf',
+  path: '/pdf',
   getParentRoute: () => WrapperAuthenticatedRoute,
 } as any)
 
@@ -169,6 +176,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WrapperAuthenticatedMyCodesImport
       parentRoute: typeof WrapperAuthenticatedImport
     }
+    '/_wrapper/_authenticated/pdf': {
+      id: '/_wrapper/_authenticated/pdf'
+      path: '/pdf'
+      fullPath: '/pdf'
+      preLoaderRoute: typeof WrapperAuthenticatedPdfImport
+      parentRoute: typeof WrapperAuthenticatedImport
+    }
     '/_wrapper/_authenticated/text': {
       id: '/_wrapper/_authenticated/text'
       path: '/text'
@@ -205,6 +219,7 @@ declare module '@tanstack/react-router' {
 interface WrapperAuthenticatedRouteChildren {
   WrapperAuthenticatedEmailRoute: typeof WrapperAuthenticatedEmailRoute
   WrapperAuthenticatedMyCodesRoute: typeof WrapperAuthenticatedMyCodesRoute
+  WrapperAuthenticatedPdfRoute: typeof WrapperAuthenticatedPdfRoute
   WrapperAuthenticatedTextRoute: typeof WrapperAuthenticatedTextRoute
   WrapperAuthenticatedUrlRoute: typeof WrapperAuthenticatedUrlRoute
   WrapperAuthenticatedVcardRoute: typeof WrapperAuthenticatedVcardRoute
@@ -214,6 +229,7 @@ interface WrapperAuthenticatedRouteChildren {
 const WrapperAuthenticatedRouteChildren: WrapperAuthenticatedRouteChildren = {
   WrapperAuthenticatedEmailRoute: WrapperAuthenticatedEmailRoute,
   WrapperAuthenticatedMyCodesRoute: WrapperAuthenticatedMyCodesRoute,
+  WrapperAuthenticatedPdfRoute: WrapperAuthenticatedPdfRoute,
   WrapperAuthenticatedTextRoute: WrapperAuthenticatedTextRoute,
   WrapperAuthenticatedUrlRoute: WrapperAuthenticatedUrlRoute,
   WrapperAuthenticatedVcardRoute: WrapperAuthenticatedVcardRoute,
@@ -248,6 +264,7 @@ export interface FileRoutesByFullPath {
   '/': typeof WrapperIndexRoute
   '/email': typeof WrapperAuthenticatedEmailRoute
   '/my-codes': typeof WrapperAuthenticatedMyCodesRoute
+  '/pdf': typeof WrapperAuthenticatedPdfRoute
   '/text': typeof WrapperAuthenticatedTextRoute
   '/url': typeof WrapperAuthenticatedUrlRoute
   '/vcard': typeof WrapperAuthenticatedVcardRoute
@@ -262,6 +279,7 @@ export interface FileRoutesByTo {
   '/': typeof WrapperIndexRoute
   '/email': typeof WrapperAuthenticatedEmailRoute
   '/my-codes': typeof WrapperAuthenticatedMyCodesRoute
+  '/pdf': typeof WrapperAuthenticatedPdfRoute
   '/text': typeof WrapperAuthenticatedTextRoute
   '/url': typeof WrapperAuthenticatedUrlRoute
   '/vcard': typeof WrapperAuthenticatedVcardRoute
@@ -278,6 +296,7 @@ export interface FileRoutesById {
   '/_wrapper/': typeof WrapperIndexRoute
   '/_wrapper/_authenticated/email': typeof WrapperAuthenticatedEmailRoute
   '/_wrapper/_authenticated/my-codes': typeof WrapperAuthenticatedMyCodesRoute
+  '/_wrapper/_authenticated/pdf': typeof WrapperAuthenticatedPdfRoute
   '/_wrapper/_authenticated/text': typeof WrapperAuthenticatedTextRoute
   '/_wrapper/_authenticated/url': typeof WrapperAuthenticatedUrlRoute
   '/_wrapper/_authenticated/vcard': typeof WrapperAuthenticatedVcardRoute
@@ -294,6 +313,7 @@ export interface FileRouteTypes {
     | '/'
     | '/email'
     | '/my-codes'
+    | '/pdf'
     | '/text'
     | '/url'
     | '/vcard'
@@ -307,6 +327,7 @@ export interface FileRouteTypes {
     | '/'
     | '/email'
     | '/my-codes'
+    | '/pdf'
     | '/text'
     | '/url'
     | '/vcard'
@@ -321,6 +342,7 @@ export interface FileRouteTypes {
     | '/_wrapper/'
     | '/_wrapper/_authenticated/email'
     | '/_wrapper/_authenticated/my-codes'
+    | '/_wrapper/_authenticated/pdf'
     | '/_wrapper/_authenticated/text'
     | '/_wrapper/_authenticated/url'
     | '/_wrapper/_authenticated/vcard'
@@ -370,6 +392,7 @@ export const routeTree = rootRoute
       "children": [
         "/_wrapper/_authenticated/email",
         "/_wrapper/_authenticated/my-codes",
+        "/_wrapper/_authenticated/pdf",
         "/_wrapper/_authenticated/text",
         "/_wrapper/_authenticated/url",
         "/_wrapper/_authenticated/vcard",
@@ -394,6 +417,10 @@ export const routeTree = rootRoute
     },
     "/_wrapper/_authenticated/my-codes": {
       "filePath": "_wrapper/_authenticated/my-codes.tsx",
+      "parent": "/_wrapper/_authenticated"
+    },
+    "/_wrapper/_authenticated/pdf": {
+      "filePath": "_wrapper/_authenticated/pdf.tsx",
       "parent": "/_wrapper/_authenticated"
     },
     "/_wrapper/_authenticated/text": {

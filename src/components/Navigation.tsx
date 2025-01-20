@@ -20,10 +20,10 @@ const tabs: Tap[] = [
 		tabName: "vcard",
 		path: "/vcard",
 	},
-	// {
-	// 	tabName: "phone",
-	// 	path: "/phone",
-	// },
+	{
+		tabName: "pdf",
+		path: "/pdf",
+	},
 	// {
 	// 	tabName: "sms",
 	// 	path: "/sms",

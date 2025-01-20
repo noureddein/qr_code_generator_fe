@@ -24,6 +24,7 @@ export const SORT_LABEL = {
 	[Sort.NAME_ASC]: "Name (A-Z)",
 	[Sort.NAME_DESC]: "Name (Z-A)",
 };
+export const PLACEHOLDER_NO_IMAGE = "./src/assets/no-image.png";
 
 export const FILTER_LABEL = {
 	all: "All",
@@ -31,4 +32,5 @@ export const FILTER_LABEL = {
 	[QRCodeTypes.TEXT]: "Text",
 	[QRCodeTypes.URL]: "URL",
 	[QRCodeTypes.VCARD]: "vCard",
+	[QRCodeTypes.PDF]: "PDF",
 };

@@ -8,7 +8,13 @@ import { Spinner } from "flowbite-react/components/Spinner";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-const EmailForm = ({ data }: { data?: EmailFormDataTypes }) => {
+const EmailForm = ({
+	data,
+	onCloseModal,
+}: {
+	data?: EmailFormDataTypes;
+	onCloseModal?: () => void;
+}) => {
 	const initialValues: EmailFormDataTypes = data || {
 		name: "",
 		email: "",
@@ -75,6 +81,7 @@ const EmailForm = ({ data }: { data?: EmailFormDataTypes }) => {
 			{
 				onSuccess: async (res) => {
 					toast.success(res.message);
+					onCloseModal && onCloseModal();
 				},
 				onError: (err) => {
 					const errStatus = err.response?.status as number;

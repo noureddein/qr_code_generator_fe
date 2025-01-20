@@ -1,16 +1,25 @@
+import { DeleteIcon } from "@components/Icons";
 import Input from "@components/Input";
-import UploadImage from "@components/UploadImage";
+import FileUpload from "@components/UploadImage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useSaveQrCode from "@hooks/useSaveQrCode";
 import useUpdateQRCode from "@hooks/useUpdateQRCode";
 import { createVCard, fileToBase64 } from "@lib/helpers";
+import { PLACEHOLDER_NO_IMAGE } from "@src/constants";
 import { ErrorResponse, QRCodeTypes } from "@src/types.d";
 import { vCardFormDataTypes, vCardSchema } from "@validation/qrCodeOptions";
+import { Avatar } from "flowbite-react/components/Avatar";
 import { Spinner } from "flowbite-react/components/Spinner";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
+const VCardForm = ({
+	data,
+	onCloseModal,
+}: {
+	data?: vCardFormDataTypes;
+	onCloseModal?: () => void;
+}) => {
 	const initialValues = data || {
 		firstName: "Do Media",
 		lastName: "",
@@ -49,9 +58,11 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 		setError,
 		reset,
 		setValue,
+		watch,
 	} = useForm<vCardFormDataTypes>({
 		resolver: zodResolver(vCardSchema),
 		defaultValues: initialValues,
+		mode: "onChange",
 	});
 	const onSave = async (data: vCardFormDataTypes) => {
 		const vCard = createVCard(data);
@@ -62,21 +73,7 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 			},
 			type: QRCodeTypes.VCARD,
 		};
-		console.log({ dataToSave });
-		// const formData = new FormData();
-		// const keys = Object.keys(dataToSave.qrData);
 
-		// keys.forEach((key) => {
-		// 	if (key === "image") {
-		// 		const value = dataToSave.qrData.image?.[0] || undefined;
-		// 		formData.append(key, value as string | Blob);
-		// 	} else {
-		// 		const value =
-		// 			dataToSave.qrData[key as keyof vCardFormDataTypes];
-		// 		formData.append(key, value as string | Blob);
-		// 	}
-		// });
-		// formData.append("type", QRCodeTypes.VCARD);
 		saveQR(dataToSave, {
 			onSuccess: (res) => {
 				toast.success(res.data.message);
@@ -102,6 +99,7 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 			{
 				onSuccess: async (res) => {
 					toast.success(res.message);
+					onCloseModal && onCloseModal();
 				},
 				onError: (err) => {
 					const errStatus = err.response?.status as number;
@@ -120,7 +118,7 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 			}
 		);
 	};
-
+	const isUpdateForm = Boolean(initialValues.id);
 	const onSubmit = async (data: vCardFormDataTypes) => {
 		if (data.image?.[0]) {
 			const convertResult = await fileToBase64(data.image[0]);
@@ -130,198 +128,238 @@ const VCardForm = ({ data }: { data?: vCardFormDataTypes }) => {
 			data.image = undefined;
 		}
 
-		if (initialValues.id) {
+		if (isUpdateForm) {
 			onUpdate(data);
 		} else {
 			onSave(data);
 		}
 	};
 
+	const image = watch("imageBase64");
+
+	const removeLogo = () => {
+		setValue("image", undefined);
+		setValue("imageBase64", undefined);
+		setValue("imageType", undefined);
+		if (data?.imageBase64) {
+			data.imageBase64 = undefined;
+			data.imageType = undefined;
+		}
+	};
+
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
-			<div className="flex">
-				<div className="flex-auto w-full p-4">
-					<Input
-						id="name"
-						label="QR Code name"
-						register={register}
-						errors={errors}
-						inputProps={{ placeholder: "Name" }}
-						containerClass={{ className: "mb-3" }}
-					/>
-
-					<div className="flex flex-col gap-2">
+		<>
+			<div className="flex justify-center py-2 my-2">
+				{isUpdateForm && (
+					<span className="relative">
+						<Avatar
+							img={image || PLACEHOLDER_NO_IMAGE}
+							size="xl"
+							rounded
+							className="z-0"
+						/>
+						{image && (
+							<span className="absolute bottom-0 left-0 z-10 ">
+								<DeleteIcon
+									className="text-red-600 shadow-md size-8 hover:cursor-pointer hover:scale-105"
+									onClick={() => removeLogo()}
+								/>
+							</span>
+						)}
+					</span>
+				)}
+			</div>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<div className="flex">
+					<div className="flex-auto w-full p-4">
 						<Input
-							id="firstName"
-							label="First name"
+							id="name"
+							label="QR Code name"
 							register={register}
 							errors={errors}
-							inputProps={{
-								placeholder: "Fist name",
-							}}
+							inputProps={{ placeholder: "Name" }}
+							containerClass={{ className: "mb-3" }}
 						/>
 
-						<Input
-							id="lastName"
-							label="Last name"
-							register={register}
-							errors={errors}
-							inputProps={{
-								placeholder: "Last name",
-							}}
-						/>
+						<div className="flex flex-col gap-2">
+							<Input
+								id="firstName"
+								label="First name"
+								register={register}
+								errors={errors}
+								inputProps={{
+									placeholder: "Fist name",
+								}}
+							/>
 
-						<UploadImage
-							errors={errors}
-							id="image"
-							label="Upload Image"
-							register={register}
-							setValue={setValue}
-						/>
+							<Input
+								id="lastName"
+								label="Last name"
+								register={register}
+								errors={errors}
+								inputProps={{
+									placeholder: "Last name",
+								}}
+							/>
 
-						<Input
-							id="organization"
-							label="Organization"
-							register={register}
-							errors={errors}
-							inputProps={{
-								placeholder: "Organization",
-							}}
-						/>
+							<FileUpload
+								errors={errors}
+								id="image"
+								label="Logo"
+								register={register}
+								inputProps={{
+									accept: ".svg, .png, .jpg",
+									multiple: false,
+								}}
+								helperText="SVG, PNG, or JPG (MAX. 400x400px)."
+							/>
 
-						<Input
-							id="position"
-							label="Position"
-							register={register}
-							errors={errors}
-							inputProps={{
-								placeholder: "Position",
-							}}
-						/>
+							<Input
+								id="organization"
+								label="Organization"
+								register={register}
+								errors={errors}
+								inputProps={{
+									placeholder: "Organization",
+								}}
+							/>
 
-						<Input
-							id="phoneWork"
-							label="Phone (Work)"
-							register={register}
-							errors={errors}
-							inputProps={{
-								placeholder: "Phone (Work)",
-							}}
-						/>
+							<Input
+								id="position"
+								label="Position"
+								register={register}
+								errors={errors}
+								inputProps={{
+									placeholder: "Position",
+								}}
+							/>
 
-						<Input
-							id="phoneMobile"
-							label="Phone (Mobile)"
-							register={register}
-							errors={errors}
-							inputProps={{
-								placeholder: "Phone (Mobile)",
-							}}
-						/>
+							<Input
+								id="phoneWork"
+								label="Phone (Work)"
+								register={register}
+								errors={errors}
+								inputProps={{
+									placeholder: "Phone (Work)",
+								}}
+							/>
 
-						<Input
-							id="fax"
-							label="Fax"
-							register={register}
-							errors={errors}
-							inputProps={{
-								placeholder: "Fax",
-							}}
-						/>
+							<Input
+								id="phoneMobile"
+								label="Phone (Mobile)"
+								register={register}
+								errors={errors}
+								inputProps={{
+									placeholder: "Phone (Mobile)",
+								}}
+							/>
 
-						<Input
-							id="email"
-							label="Email"
-							register={register}
-							errors={errors}
-							inputProps={{
-								placeholder: "Email",
-							}}
-							type="email"
-						/>
+							<Input
+								id="fax"
+								label="Fax"
+								register={register}
+								errors={errors}
+								inputProps={{
+									placeholder: "Fax",
+								}}
+							/>
 
-						<Input
-							id="website"
-							label="Website"
-							register={register}
-							errors={errors}
-							inputProps={{
-								placeholder: "Website",
-							}}
-							type="url"
-						/>
+							<Input
+								id="email"
+								label="Email"
+								register={register}
+								errors={errors}
+								inputProps={{
+									placeholder: "Email",
+								}}
+								type="email"
+							/>
 
-						<Input
-							id="street"
-							label="Street"
-							register={register}
-							errors={errors}
-							inputProps={{
-								placeholder: "Street",
-							}}
-						/>
+							<Input
+								id="website"
+								label="Website"
+								register={register}
+								errors={errors}
+								inputProps={{
+									placeholder: "Website",
+								}}
+								type="url"
+							/>
 
-						<Input
-							id="zipcode"
-							label="Zip code"
-							register={register}
-							errors={errors}
-							inputProps={{
-								placeholder: "Zip code",
-							}}
-						/>
+							<Input
+								id="street"
+								label="Street"
+								register={register}
+								errors={errors}
+								inputProps={{
+									placeholder: "Street",
+								}}
+							/>
 
-						<Input
-							id="city"
-							label="City"
-							register={register}
-							errors={errors}
-							inputProps={{
-								placeholder: "City",
-							}}
-						/>
+							<Input
+								id="zipcode"
+								label="Zip code"
+								register={register}
+								errors={errors}
+								inputProps={{
+									placeholder: "Zip code",
+								}}
+							/>
 
-						<Input
-							id="state"
-							label="State"
-							register={register}
-							errors={errors}
-							inputProps={{
-								placeholder: "State",
-							}}
-						/>
+							<Input
+								id="city"
+								label="City"
+								register={register}
+								errors={errors}
+								inputProps={{
+									placeholder: "City",
+								}}
+							/>
 
-						<Input
-							id="country"
-							label="Country"
-							register={register}
-							errors={errors}
-							inputProps={{
-								placeholder: "Country",
-							}}
-						/>
-					</div>
+							<Input
+								id="state"
+								label="State"
+								register={register}
+								errors={errors}
+								inputProps={{
+									placeholder: "State",
+								}}
+							/>
 
-					{isError && (
-						<p className="my-4 text-red-600 ">{context?.error}</p>
-					)}
+							<Input
+								id="country"
+								label="Country"
+								register={register}
+								errors={errors}
+								inputProps={{
+									placeholder: "Country",
+								}}
+							/>
+						</div>
 
-					<div className="flex mt-4">
-						<button
-							disabled={!isValid || isSaving || isUpdating}
-							type="submit"
-							className="focus:outline-none text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:hover:cursor-not-allowed me-0 ms-auto"
-						>
-							{isSaving || isUpdating ? (
-								<Spinner color="gray" />
-							) : (
-								"Save"
-							)}
-						</button>
+						{isError && (
+							<p className="my-4 text-red-600 ">
+								{context?.error}
+							</p>
+						)}
+
+						<div className="flex mt-4">
+							<button
+								disabled={!isValid || isSaving || isUpdating}
+								type="submit"
+								className="focus:outline-none text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:hover:cursor-not-allowed me-0 ms-auto"
+							>
+								{isSaving || isUpdating ? (
+									<Spinner color="gray" />
+								) : (
+									"Save"
+								)}
+							</button>
+						</div>
 					</div>
 				</div>
-			</div>
-		</form>
+			</form>
+		</>
 	);
 };
 

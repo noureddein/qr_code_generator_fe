@@ -8,7 +8,13 @@ import { Spinner } from "flowbite-react/components/Spinner";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-const URLForm = ({ data }: { data?: URLFormDataTypes }) => {
+const URLForm = ({
+	data,
+	onCloseModal,
+}: {
+	data?: URLFormDataTypes;
+	onCloseModal?: () => void;
+}) => {
 	const initialValues: URLFormDataTypes = data || {
 		name: "",
 		url: "https://www.easyproject.cn",
@@ -65,6 +71,7 @@ const URLForm = ({ data }: { data?: URLFormDataTypes }) => {
 			{
 				onSuccess: (res) => {
 					toast.success(res.message);
+					onCloseModal && onCloseModal();
 				},
 				onError: (err) => {
 					const errStatus = err.response?.status as number;

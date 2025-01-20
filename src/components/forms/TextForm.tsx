@@ -8,7 +8,13 @@ import { Spinner } from "flowbite-react/components/Spinner";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-const TextForm = ({ data }: { data?: TextFormDataTypes }) => {
+const TextForm = ({
+	data,
+	onCloseModal,
+}: {
+	data?: TextFormDataTypes;
+	onCloseModal?: () => void;
+}) => {
 	const initialValues: TextFormDataTypes = data || {
 		name: "",
 		text: "",
@@ -67,6 +73,7 @@ const TextForm = ({ data }: { data?: TextFormDataTypes }) => {
 			{
 				onSuccess: async (res) => {
 					toast.success(res.message);
+					onCloseModal && onCloseModal();
 				},
 				onError: (err) => {
 					const errStatus = err.response?.status as number;

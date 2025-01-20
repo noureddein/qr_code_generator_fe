@@ -5,7 +5,7 @@ import VCardForm from "@components/forms/VCardForm";
 import useDiscloser from "@hooks/useDiscloser";
 import useFetchQRCode from "@hooks/useFetchQRCode";
 import { ResponseRow } from "@src/routes/_wrapper/_authenticated/my-codes";
-import { QRCodeTypes } from "@src/types.d";
+import { PDFQRData, QRCodeTypes } from "@src/types.d";
 import {
 	EmailFormDataTypes,
 	TextFormDataTypes,
@@ -15,6 +15,7 @@ import {
 import { Button } from "flowbite-react/components/Button";
 import { Modal } from "flowbite-react/components/Modal";
 import ModalLoader from "../loaders/ModalLoader";
+import PDFForm from "@components/forms/PDFForm";
 
 interface EditQRCodeModalProps {
 	id: string;
@@ -57,6 +58,7 @@ function EditQRCodeModal({ id, childrenButton }: EditQRCodeModalProps) {
 										...data,
 										id: qrData?.row._id as string,
 									}}
+									onCloseModal={onClose}
 								/>
 							)}
 						</ModalLoader>
@@ -73,22 +75,49 @@ interface UpdateFormProps {
 		| URLFormDataTypes
 		| vCardFormDataTypes
 		| TextFormDataTypes
-		| EmailFormDataTypes;
+		| EmailFormDataTypes
+		| PDFQRData;
+	onCloseModal: () => void;
 }
 
-const UpdateForm = ({ qrCodeType, data }: UpdateFormProps) => {
+const UpdateForm = ({ qrCodeType, data, onCloseModal }: UpdateFormProps) => {
 	switch (qrCodeType) {
 		case QRCodeTypes.EMAIL:
-			return <EmailForm data={data as EmailFormDataTypes} />;
+			return (
+				<EmailForm
+					data={data as EmailFormDataTypes}
+					onCloseModal={onCloseModal}
+				/>
+			);
 
 		case QRCodeTypes.TEXT:
-			return <TextForm data={data as TextFormDataTypes} />;
+			return (
+				<TextForm
+					data={data as TextFormDataTypes}
+					onCloseModal={onCloseModal}
+				/>
+			);
 
 		case QRCodeTypes.URL:
-			return <URLForm data={data as URLFormDataTypes} />;
+			return (
+				<URLForm
+					data={data as URLFormDataTypes}
+					onCloseModal={onCloseModal}
+				/>
+			);
 
 		case QRCodeTypes.VCARD:
-			return <VCardForm data={data as vCardFormDataTypes} />;
+			return (
+				<VCardForm
+					data={data as vCardFormDataTypes}
+					onCloseModal={onCloseModal}
+				/>
+			);
+
+		case QRCodeTypes.PDF:
+			return (
+				<PDFForm data={data as PDFQRData} onCloseModal={onCloseModal} />
+			);
 
 		default:
 			return "";
