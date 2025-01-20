@@ -3,7 +3,7 @@ import { QRCodeTypes } from "@src/types.d";
 export const defaultQROpts = {
 	colorLight: "#ffffff",
 	colorDark: "#000000",
-	quietZone: 20,
+	quietZone: 50,
 	quietZoneColor: "#ffffff",
 	size: 1000,
 };

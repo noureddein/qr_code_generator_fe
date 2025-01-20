@@ -62,6 +62,13 @@ const Render = ({ data }: { data: any }) => {
 		case QRCodeTypes.URL:
 			return <URLView qrData={data.row.qrData} />;
 
+		case QRCodeTypes.PDF:
+			return (
+				<URLView
+					qrData={{ ...data.row.qrData, url: data.row.qrData.text }}
+				/>
+			);
+
 		default:
 			break;
 	}

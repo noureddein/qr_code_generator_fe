@@ -10,7 +10,7 @@ export const qrCodeOptions = z.object({
 	colorLight: z.string(),
 	quietZoneColor: z.string(),
 	size: z.number().min(200).max(2000),
-	quietZone: z.number().min(0).max(100),
+	quietZone: z.number().min(0).max(1000),
 	dots: z.number().min(0.1).max(1),
 });
 

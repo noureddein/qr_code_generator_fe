@@ -52,6 +52,8 @@ const QRImageConfig = <T extends FieldValues>({
 						<RangeSlider
 							id="quiet-zone"
 							itemID={"quietZone"}
+							min={0}
+							max={1000}
 							{...register("quietZone" as Path<T>, {
 								required: false,
 								valueAsNumber: true,
