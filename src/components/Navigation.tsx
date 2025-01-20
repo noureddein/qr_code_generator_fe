@@ -33,24 +33,26 @@ const tabs: Tap[] = [
 const Navigation = () => {
 	const user = useAuth((s) => s.user);
 	return (
-		<Container>
-			<div className="">
-				{user && (
-					<div className="px-2 pb-0">
-						<div className="flex flex-wrap gap-4 text-gray-300">
-							{tabs.map((tab, idx) => (
-								<CustomLink
-									key={idx}
-									path={tab.path}
-									tabName={tab.tabName}
-									className="uppercase"
-								/>
-							))}
+		<div className="">
+			<Container>
+				<div>
+					{user && (
+						<div className="px-2 pb-0">
+							<div className="flex flex-wrap gap-4 text-gray-300">
+								{tabs.map((tab, idx) => (
+									<CustomLink
+										key={idx}
+										path={tab.path}
+										tabName={tab.tabName}
+										className="uppercase"
+									/>
+								))}
+							</div>
 						</div>
-					</div>
-				)}
-			</div>
-		</Container>
+					)}
+				</div>
+			</Container>
+		</div>
 	);
 };
 

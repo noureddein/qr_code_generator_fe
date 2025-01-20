@@ -62,7 +62,7 @@ const VCardForm = ({
 	} = useForm<vCardFormDataTypes>({
 		resolver: zodResolver(vCardSchema),
 		defaultValues: initialValues,
-		mode: "onChange",
+		mode: "all",
 	});
 	const onSave = async (data: vCardFormDataTypes) => {
 		const vCard = createVCard(data);

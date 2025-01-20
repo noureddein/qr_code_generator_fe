@@ -39,6 +39,7 @@ const URLForm = ({
 	} = useForm<URLFormDataTypes>({
 		resolver: zodResolver(urlSchema),
 		defaultValues: initialValues,
+		mode: "all",
 	});
 
 	const onSave = async (data: URLFormDataTypes) => {

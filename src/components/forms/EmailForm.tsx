@@ -40,6 +40,7 @@ const EmailForm = ({
 	} = useForm<EmailFormDataTypes>({
 		resolver: zodResolver(emailSchema),
 		defaultValues: initialValues,
+		mode: "all",
 	});
 
 	const onSave = async (data: EmailFormDataTypes) => {

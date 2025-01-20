@@ -4,6 +4,8 @@ import { z } from "zod";
 const MIN_WIDTH = 400; // Minimum width in pixels
 const MIN_HEIGHT = 400;
 const MAX_IMAGE_SIZE = 300 * 1024; //300KB
+export const MAX_TEXT_LENGTH = 1024;
+
 // Shared Schema Components
 export const qrCodeOptions = z.object({
 	colorDark: z.string(),
@@ -118,7 +120,7 @@ export const vCardSchema = defaultOptions.extend({
 });
 
 export const textSchema = defaultOptions.extend({
-	text: z.string(),
+	text: z.string().max(MAX_TEXT_LENGTH),
 });
 
 export const PDFSchema = defaultOptions.extend({

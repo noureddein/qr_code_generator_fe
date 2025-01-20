@@ -109,7 +109,7 @@ function RouteComponent() {
 				</div>
 			</div>
 
-			<QrCardLoader isLoading={isPending}>
+			<QrCardLoader cardsNum={4} isLoading={isPending}>
 				<div className="flex flex-col gap-4">
 					{allIds.length ? (
 						data?.rows.map((row) => (

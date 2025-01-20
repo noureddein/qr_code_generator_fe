@@ -8,7 +8,7 @@ import CustomLink from "./CustomLink";
 
 const Header = () => {
 	return (
-		<header className="bg-green-700 shadow-lg ">
+		<header className="sticky top-0 left-0 right-0 z-30 bg-green-700 shadow-lg">
 			<Container>
 				<div className="flex items-center justify-between">
 					<Link to="/url">

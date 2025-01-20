@@ -3,10 +3,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useSaveQrCode from "@hooks/useSaveQrCode";
 import useUpdateQRCode from "@hooks/useUpdateQRCode";
 import { ErrorResponse, QRCodeTypes } from "@src/types.d";
-import { TextFormDataTypes, textSchema } from "@validation/qrCodeOptions";
+import {
+	MAX_TEXT_LENGTH,
+	TextFormDataTypes,
+	textSchema,
+} from "@validation/qrCodeOptions";
 import { Spinner } from "flowbite-react/components/Spinner";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { twMerge } from "tailwind-merge";
 
 const TextForm = ({
 	data,
@@ -35,12 +40,16 @@ const TextForm = ({
 		register,
 		handleSubmit,
 		reset,
-		formState: { errors, isValid },
 		setError,
+		watch,
+		formState: { errors, isValid },
 	} = useForm<TextFormDataTypes>({
 		resolver: zodResolver(textSchema),
 		defaultValues: initialValues,
+		mode: "all",
 	});
+
+	const textLength = watch("text").length;
 
 	const onSave = async (data: TextFormDataTypes) => {
 		const dataToSave = {
@@ -126,6 +135,18 @@ const TextForm = ({
 								required: true,
 							})}
 						/>
+						<div className="flex justify-end">
+							<span
+								className={twMerge(
+									"mt-1 text-sm text-gray-500",
+									textLength >= MAX_TEXT_LENGTH
+										? "text-red-600"
+										: ""
+								)}
+							>
+								{textLength}/{MAX_TEXT_LENGTH}
+							</span>
+						</div>
 
 						{errors.text && (
 							<span className="text-sm text-red-500 ps-2">
