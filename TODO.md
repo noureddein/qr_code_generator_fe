@@ -6,3 +6,4 @@
 [] - Create a page to show logs error
 [] - Add statistics for each qr code
 [] - Let the user to add a logo on the QR code
+[Done] - Add the ability to user to copy the QR Code

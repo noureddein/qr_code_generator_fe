@@ -21,7 +21,7 @@ import { RxUpdate } from "react-icons/rx";
 import { Tooltip } from "flowbite-react/components/Tooltip";
 import EditQRDesignModal from "./modals/EditQRDesignModal";
 import QRCodeZoom from "./modals/QRCodeZoom";
-import { Checkbox } from "flowbite-react";
+import { Checkbox } from "flowbite-react/components/Checkbox";
 import useBulkUpdate from "@store/bulkUpdate";
 import { Status as StatusType } from "@src/constants";
 import { FaRegFilePdf } from "react-icons/fa";
