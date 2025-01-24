@@ -1,10 +1,10 @@
-import { LoginFormDataTypes } from "@validation/index";
-import usePrivateServer from "./usePrivateServer";
 import { GenerateQRCodeResponse, User } from "@src/types.d";
+import { LoginFormDataTypes } from "@validation/index";
 import { QRDataToSubmit } from "@validation/qrCodeOptions";
 import { AxiosResponse } from "axios";
+import usePrivateServer from "./usePrivateServer";
 
-type IdentityResponse = {
+export type IdentityResponse = {
 	isLoggedIn: boolean;
 	user: null | User;
 };
@@ -25,8 +25,10 @@ const useAPIs = () => {
 
 	const identity = async (): Promise<IdentityResponse> => {
 		try {
+			const abort = new AbortController();
+
 			const URL = "/api/auth/identity";
-			const res = await privateServer.get(URL);
+			const res = await privateServer.get(URL, { signal: abort.signal });
 			return res.data;
 		} catch (error) {
 			return { isLoggedIn: false, user: null };

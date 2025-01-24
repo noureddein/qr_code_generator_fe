@@ -1,7 +1,7 @@
-import ColorPicker from "./ColorPicker";
-import { FieldValues, Path, UseFormRegister } from "react-hook-form";
 import { Label } from "flowbite-react/components/Label";
 import { RangeSlider } from "flowbite-react/components/RangeSlider";
+import { FieldValues, Path, UseFormRegister } from "react-hook-form";
+import ColorPicker from "./ColorPicker";
 
 interface QRImageConfigProps<T extends FieldValues> {
 	register: UseFormRegister<T>;
@@ -34,6 +34,7 @@ const QRImageConfig = <T extends FieldValues>({
 					/>
 				</div>
 			</div>
+
 			<div>
 				<h5 className="mb-2 font-medium">Quiet Zone</h5>
 

@@ -4,6 +4,10 @@ import { z } from "zod";
 const MIN_WIDTH = 400; // Minimum width in pixels
 const MIN_HEIGHT = 400;
 const MAX_IMAGE_SIZE = 300 * 1024; //300KB
+
+const MIN_QR_LOGO_WIDTH = 400; // Minimum width in pixels
+const MIN_QR_LOGO_HEIGHT = 400;
+
 export const MAX_TEXT_LENGTH = 1024;
 
 // Shared Schema Components
@@ -14,6 +18,48 @@ export const qrCodeOptions = z.object({
 	size: z.number().min(200).max(2000),
 	quietZone: z.number().min(0).max(1000),
 	dots: z.number().min(0.1).max(1),
+	logo: z
+		.instanceof(FileList)
+		.refine(
+			(file) => {
+				if (file.length > 0) {
+					return file[0] && file[0].size <= MAX_IMAGE_SIZE;
+				}
+				return true; // To make file optional
+			},
+			{
+				message: "File size must be less than 300KB",
+			}
+		)
+		.refine(
+			(file) => {
+				if (file.length > 0) {
+					return /\.(jpg|png|svg)$/i.test(file[0].name);
+				}
+				return true; // To make file optional
+			},
+			{
+				message: "File must have a valid extension (jpg, png, svg).",
+			}
+		)
+		.refine(
+			async (files) => {
+				const file = files[0];
+				if (!file) return true;
+
+				const img = await getImageDimensions(file);
+				const isSquare = img.width === img.height;
+				if (isSquare && img.height <= MIN_QR_LOGO_WIDTH) {
+					return true;
+				}
+				return false;
+			},
+			{
+				message: `Image must be square, and max ${MIN_QR_LOGO_WIDTH}x${MIN_QR_LOGO_HEIGHT}px.`,
+			}
+		)
+		.optional(),
+	logoBase64: z.string().optional(),
 });
 
 const defaultOptions = z.object({

@@ -26,6 +26,7 @@ export interface QrDesign {
 	size: number;
 	dots: number;
 	quietZone: number;
+	logoBase64: string;
 }
 
 const useHandleQRDesign = <TResponse,>({
@@ -90,7 +91,7 @@ const useHandleQRDesign = <TResponse,>({
 		MutationDataProps,
 		MutationContext
 	>({
-		mutationFn: async (data: MutationDataProps): Promise<AxiosResponse> => {
+		mutationFn: async (data): Promise<AxiosResponse> => {
 			try {
 				const URL = `/api/qr-codes/design/${data.id}`;
 				const response = await privateServer.put<AxiosResponse>(

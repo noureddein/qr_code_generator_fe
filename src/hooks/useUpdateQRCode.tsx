@@ -35,9 +35,9 @@ const useUpdateQRCode = ({ URL }: { URL: string }) => {
 			const result = await privateServer.put(`${URL}/${id}`, rest);
 			return result.data;
 		},
-		onSuccess: async (_, variables) => {
+		onSuccess: async (_) => {
 			await queryClient.invalidateQueries({
-				queryKey: ["get_one_qr_code", { id: variables.data.id }],
+				queryKey: ["get_many_qr_codes"],
 			});
 		},
 	});
