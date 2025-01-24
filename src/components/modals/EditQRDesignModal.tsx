@@ -22,6 +22,7 @@ import {
 import toast from "react-hot-toast";
 import { twMerge } from "tailwind-merge";
 import ModalLoader from "../loaders/ModalLoader";
+import noneImage from "@src/assets/none.png";
 
 interface ImageGalleryProps<T extends FieldValues> {
 	register: UseFormRegister<T>;
@@ -67,7 +68,7 @@ const ImageGallery = <T extends FieldValues>({
 	return (
 		<div className="flex flex-row flex-wrap gap-2 my-4">
 			<img
-				src={"/src/assets/none.png"}
+				src={noneImage}
 				alt={"no-image"}
 				className={twMerge(
 					"p-1 border-2 rounded-sm cursor-pointer bg-gray-100/50 size-12 hover:bg-gray-200",
