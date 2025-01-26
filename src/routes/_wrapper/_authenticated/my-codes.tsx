@@ -17,6 +17,7 @@ import FilterDropdown, { isValidFilterKey } from "@components/FilterDropdown";
 import useBulkUpdate from "@store/bulkUpdate";
 import BulkUpdateDropdown from "@components/BulkUpdateDropdown";
 import { Badge } from "flowbite-react/components/Badge";
+import Pagination from "@components/Pagination";
 
 export const Route = createFileRoute("/_wrapper/_authenticated/my-codes")({
 	component: RouteComponent,
@@ -26,6 +27,7 @@ export const Route = createFileRoute("/_wrapper/_authenticated/my-codes")({
 				query: z.string().optional(),
 				sort: z.string().optional(),
 				type: z.string().optional(),
+				page: z.number().optional(),
 			})
 			.parse(search),
 });
@@ -45,6 +47,11 @@ export interface ResponseRow {
 	scanCount: number;
 }
 
+interface Response {
+	rows: ResponseRow[];
+	count: number;
+}
+
 function RouteComponent() {
 	const privateServer = usePrivateServer();
 	const search = useSearch({ from: "/_wrapper/_authenticated/my-codes" });
@@ -52,15 +59,16 @@ function RouteComponent() {
 	const resetBulkUpdate = useBulkUpdate((s) => s.resetBulkUpdate);
 
 	const { data, isPending, isError } = useQuery<
-		{ rows: ResponseRow[] },
+		Response,
 		AxiosError,
-		{ rows: ResponseRow[] },
+		Response,
 		[
 			string,
 			{
 				q: string | undefined;
 				sort: string | undefined;
 				type: string | undefined;
+				page: number | undefined;
 			},
 		]
 	>({
@@ -76,6 +84,7 @@ function RouteComponent() {
 							? search.sort
 							: Sort.LAST_CREATED,
 						type: isValidFilterKey(search.type) ? search.type : "",
+						page: search.page || 1,
 					},
 				});
 				resetBulkUpdate();
@@ -86,7 +95,12 @@ function RouteComponent() {
 		},
 		queryKey: [
 			"get_many_qr_codes",
-			{ q: search.query, sort: search.sort, type: search.type },
+			{
+				q: search.query,
+				sort: search.sort,
+				type: search.type,
+				page: isNaN(search.page as number) ? 1 : search.page,
+			},
 		],
 	});
 
@@ -121,6 +135,7 @@ function RouteComponent() {
 							No QR codes found, Create your first one
 						</div>
 					)}
+					<Pagination totalRecords={data?.count || 0} />
 				</div>
 			</QrCardLoader>
 		</>

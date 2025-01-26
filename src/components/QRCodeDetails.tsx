@@ -59,7 +59,7 @@ const QRCodeDetails = ({ row }: QRCodeDetailsProps) => {
 					/>
 				</div>
 
-				<div className="col-span-12 leading-normal md:col-span-6 lg:col-span-4">
+				<div className="col-span-12 leading-normal md:col-span-6 lg:col-span-3">
 					<div className="flex flex-col h-full justify-evenly">
 						<Type type={type as QRCodeTypes} />
 						<h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 capitalize break-all dark:text-white">
@@ -78,7 +78,7 @@ const QRCodeDetails = ({ row }: QRCodeDetailsProps) => {
 					</div>
 				</div>
 
-				<div className="col-span-12 leading-normal md:col-span-6 lg:col-span-2 ps-3">
+				<div className="col-span-12 leading-normal md:col-span-6 lg:col-span-3 ps-3">
 					<div className="flex flex-col items-start justify-center h-full md:items-center">
 						<table>
 							<tbody>

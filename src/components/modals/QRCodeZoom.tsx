@@ -1,6 +1,8 @@
 import useDiscloser from "@hooks/useDiscloser";
-import { CustomFlowbiteTheme, Spinner } from "flowbite-react";
+import { CustomFlowbiteTheme } from "flowbite-react";
 import { Modal } from "flowbite-react/components/Modal";
+import { Tooltip } from "flowbite-react/components/Tooltip";
+import { Spinner } from "flowbite-react/components/Spinner";
 import { MdOutlineZoomOutMap } from "react-icons/md";
 import { FaCopy } from "react-icons/fa";
 import { useState } from "react";
@@ -71,17 +73,21 @@ const QRCodeZoom = ({ image }: QRCodeZoomProps) => {
 				/>
 				<div className="absolute bottom-0 right-0 hidden group-hover/zoom:block">
 					<div className="flex flex-row items-center justify-center gap-2 p-1 bg-green-600">
-						<MdOutlineZoomOutMap
-							className="text-gray-200  size-4 hover:cursor-pointer hover:scale-[1.1] "
-							onClick={onOpen}
-						/>
+						<Tooltip content="Maximize" placement="bottom">
+							<MdOutlineZoomOutMap
+								className="text-gray-200  size-4 hover:cursor-pointer hover:scale-[1.1] "
+								onClick={onOpen}
+							/>
+						</Tooltip>
 						{isCopying ? (
 							<Spinner className="size-4" />
 						) : (
-							<FaCopy
-								onClick={onCopyToClipboard}
-								className="  text-gray-200 size-4 hover:cursor-pointer hover:scale-[1.1] "
-							/>
+							<Tooltip content="Copy" placement="bottom">
+								<FaCopy
+									onClick={onCopyToClipboard}
+									className="  text-gray-200 size-4 hover:cursor-pointer hover:scale-[1.1] "
+								/>
+							</Tooltip>
 						)}
 					</div>
 				</div>
