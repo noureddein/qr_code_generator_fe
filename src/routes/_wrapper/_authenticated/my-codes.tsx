@@ -42,6 +42,7 @@ export interface ResponseRow {
 	isActive: boolean;
 	createdAt: Date;
 	updatedAt: Date;
+	scanCount: number;
 }
 
 function RouteComponent() {

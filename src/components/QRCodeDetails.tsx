@@ -25,6 +25,8 @@ import { Checkbox } from "flowbite-react/components/Checkbox";
 import useBulkUpdate from "@store/bulkUpdate";
 import { Status as StatusType } from "@src/constants";
 import { FaRegFilePdf } from "react-icons/fa";
+import { Link } from "@tanstack/react-router";
+import { IoIosArrowRoundForward } from "react-icons/io";
 
 interface QRCodeDetailsProps {
 	row: ResponseRow;
@@ -43,6 +45,7 @@ const QRCodeDetails = ({ row }: QRCodeDetailsProps) => {
 		updatedAt,
 		isActive,
 		qrData,
+		scanCount,
 	} = row;
 
 	return (
@@ -75,7 +78,7 @@ const QRCodeDetails = ({ row }: QRCodeDetailsProps) => {
 					</div>
 				</div>
 
-				<div className="col-span-12 leading-normal md:col-span-6 lg:col-span-4 ps-3">
+				<div className="col-span-12 leading-normal md:col-span-6 lg:col-span-2 ps-3">
 					<div className="flex flex-col items-start justify-center h-full md:items-center">
 						<table>
 							<tbody>
@@ -98,7 +101,29 @@ const QRCodeDetails = ({ row }: QRCodeDetailsProps) => {
 					</div>
 				</div>
 
-				<QRCodeZoom image={image} />
+				<div className="w-full col-span-12 md:col-span-6 lg:col-span-2">
+					<QRCodeZoom image={image} />
+				</div>
+
+				<div className="lg:col-span-2">
+					<div className="flex flex-col h-full justify-evenly">
+						<div className="mx-auto">
+							<div className="w-full">
+								<p className="m-0 text-2xl font-semibold text-green-400">
+									{scanCount}
+								</p>
+								<small className="text-gray-400">scans</small>
+							</div>
+
+							<Link href="/" className="text-sm underline">
+								<div className="flex items-center gap-1">
+									Details
+									<IoIosArrowRoundForward className=" size-6" />
+								</div>
+							</Link>
+						</div>
+					</div>
+				</div>
 
 				<div className="col-span-12 md:col-span-6 lg:col-span-2">
 					<div className="flex flex-col justify-center h-full">

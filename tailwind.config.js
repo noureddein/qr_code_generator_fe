@@ -1,6 +1,5 @@
 const flowbite = require("flowbite-react/tailwind");
 const colors = require("tailwindcss/colors");
-console.log({ colors });
 /** @type {import('tailwindcss').Config} */
 export default {
 	content: [

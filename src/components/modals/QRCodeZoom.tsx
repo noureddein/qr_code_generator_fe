@@ -63,31 +63,30 @@ const QRCodeZoom = ({ image }: QRCodeZoomProps) => {
 
 	return (
 		<>
-			<div className="w-full col-span-12 md:col-span-6 lg:col-span-2">
-				<div className="relative mx-auto w-fit group/zoom">
-					<img
-						className="mx-auto shadow-xl md:ms-0 md:h-auto md:w-32 md:rounded-none size-64"
-						src={image}
-						alt=""
-					/>
-					<div className="absolute bottom-0 right-0 hidden group-hover/zoom:block">
-						<div className="flex flex-row items-center justify-center gap-2 p-1 bg-green-600">
-							<MdOutlineZoomOutMap
-								className="text-gray-200  size-4 hover:cursor-pointer hover:scale-[1.1] "
-								onClick={onOpen}
+			<div className="relative mx-auto w-fit group/zoom">
+				<img
+					className="mx-auto shadow-xl md:ms-0 md:h-auto md:w-32 md:rounded-none size-64"
+					src={image}
+					alt=""
+				/>
+				<div className="absolute bottom-0 right-0 hidden group-hover/zoom:block">
+					<div className="flex flex-row items-center justify-center gap-2 p-1 bg-green-600">
+						<MdOutlineZoomOutMap
+							className="text-gray-200  size-4 hover:cursor-pointer hover:scale-[1.1] "
+							onClick={onOpen}
+						/>
+						{isCopying ? (
+							<Spinner className="size-4" />
+						) : (
+							<FaCopy
+								onClick={onCopyToClipboard}
+								className="  text-gray-200 size-4 hover:cursor-pointer hover:scale-[1.1] "
 							/>
-							{isCopying ? (
-								<Spinner className="size-4" />
-							) : (
-								<FaCopy
-									onClick={onCopyToClipboard}
-									className="  text-gray-200 size-4 hover:cursor-pointer hover:scale-[1.1] "
-								/>
-							)}
-						</div>
+						)}
 					</div>
 				</div>
 			</div>
+
 			<Modal show={open} size="md" theme={customTheme} onClick={onClose}>
 				<Modal.Body onClick={(e) => e.stopPropagation()}>
 					<img className="size-96" src={image} alt="" />
