@@ -37,7 +37,8 @@ const useAuth = create<StoreState>()(
 			user: null,
 			accessToken: null,
 			onSetUser: (user) => set(() => ({ user })),
-			onSetAccessToken: (accessToken) => set(() => ({ accessToken })),
+			onSetAccessToken: (accessToken) =>
+				set((state) => ({ ...state, accessToken })),
 			onSetAuth: (user, accessToken) =>
 				set(() => ({
 					user,
