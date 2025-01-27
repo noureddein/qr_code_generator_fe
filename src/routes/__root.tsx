@@ -30,7 +30,9 @@ const TanStackRouterDevtools =
 
 function RootComponent() {
 	const user = useAuth((s) => s.user);
-	console.log({ user });
+	const accessToken = useAuth((s) => s.accessToken);
+
+	console.log({ user, accessToken });
 	return (
 		<React.Fragment>
 			<Outlet />
