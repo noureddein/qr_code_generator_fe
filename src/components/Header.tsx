@@ -1,10 +1,11 @@
 import useAPIs from "@hooks/useAPIs";
 import useAuth from "@store/authStore";
 import { useMutation } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Spinner } from "flowbite-react/components/Spinner";
 import Container from "./Container";
 import CustomLink from "./CustomLink";
+import toast from "react-hot-toast";
 
 const Header = () => {
 	return (
@@ -26,14 +27,18 @@ const Header = () => {
 const AuthButtons = () => {
 	const { logout } = useAPIs();
 	const user = useAuth((s) => s.user);
-
+	const onSetAuth = useAuth((s) => s.onSetAuth);
+	const navigate = useNavigate();
 	const { mutate, isPending } = useMutation({
 		mutationFn: logout,
 		onSuccess: async () => {
-			window.location.href = "/login";
+			onSetAuth(null, null);
+			// window.location.href = "/login";
+			await navigate({ to: "/login" });
 		},
 		onError: (err) => {
 			console.log(err);
+			toast.error("Failed to logout!");
 		},
 	});
 
