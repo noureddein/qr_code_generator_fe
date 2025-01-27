@@ -4,8 +4,9 @@ import useAuth from "@store/authStore";
 import { useQuery } from "@tanstack/react-query";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { AxiosError } from "axios";
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { routeTree } from "./routeTree.gen";
+import VConsole from "vconsole";
 
 export const router = createRouter({
 	routeTree,
@@ -42,6 +43,14 @@ function App() {
 			onSetUser(data.user);
 		}
 	}, [data?.user]);
+
+	useEffect(() => {
+		// Initialize vConsole (only in development or on mobile)
+		// if (process.env.NODE_ENV === "development") {
+		const vConsole = new VConsole();
+		// console.log("vConsole is active!");
+		// }
+	}, []);
 
 	return (
 		<RouterProvider router={router} context={{ apis, accessToken: auth }} />

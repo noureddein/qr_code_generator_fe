@@ -27,6 +27,7 @@ const LoginForm = () => {
 			}
 		},
 		onSuccess: async (result) => {
+			console.log({ result });
 			onSetAuth(result.accessToken, result.user);
 			await navigate({ to: "/my-codes" });
 		},

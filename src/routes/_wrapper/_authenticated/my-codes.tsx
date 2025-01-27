@@ -16,8 +16,9 @@ import QrCardLoader from "@components/loaders/QrCardLoader";
 import FilterDropdown, { isValidFilterKey } from "@components/FilterDropdown";
 import useBulkUpdate from "@store/bulkUpdate";
 import BulkUpdateDropdown from "@components/BulkUpdateDropdown";
-import { Badge } from "flowbite-react/components/Badge";
 import Pagination from "@components/Pagination";
+import { Badge } from "flowbite-react/components/Badge";
+import { Tooltip } from "flowbite-react/components/Tooltip";
 
 export const Route = createFileRoute("/_wrapper/_authenticated/my-codes")({
 	component: RouteComponent,
@@ -110,11 +111,16 @@ function RouteComponent() {
 	const allIds = data?.rows.map((row) => row._id) || [];
 	return (
 		<>
-			<div className="flex flex-row items-center justify-between mb-5">
+			<div className="flex flex-row items-center justify-between gap-2 mb-5">
+				<Tooltip content="Total QR Codes" placement="bottom">
+					<Badge>{data?.count || 0}</Badge>
+				</Tooltip>
 				{totalSelected > 0 && (
 					<div className="flex items-center gap-2 text-white">
 						<BulkUpdateDropdown allIds={allIds} />
-						<Badge color="gray">{totalSelected}</Badge>
+						<Badge color="gray" title="Total selected">
+							{totalSelected}
+						</Badge>
 					</div>
 				)}
 				<div className="flex flex-col items-center justify-center gap-2 md:flex-row md:items-center md:justify-center md:ml-auto">

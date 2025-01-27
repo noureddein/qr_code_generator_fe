@@ -10,4 +10,4 @@
 [Done] - Add the ability to user to copy the QR Code
 [] - Add 404 page
 [] - Add Statistics details page
-[] - Handle the in active qr code when user try to scan a page
+[] - Handle the inactive qr code when user try to scan a page

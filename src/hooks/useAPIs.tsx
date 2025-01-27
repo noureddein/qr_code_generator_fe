@@ -31,6 +31,7 @@ const useAPIs = () => {
 			const res = await privateServer.get(URL, { signal: abort.signal });
 			return res.data;
 		} catch (error) {
+			console.log(error);
 			return { isLoggedIn: false, user: null };
 		}
 	};

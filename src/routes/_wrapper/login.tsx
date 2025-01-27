@@ -4,9 +4,14 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 export const Route = createFileRoute("/_wrapper/login")({
 	component: RouteComponent,
 	beforeLoad: async ({ context: { apis } }) => {
-		const response = await apis.identity();
-		if (response.isLoggedIn) {
-			throw redirect({ to: "/url" });
+		try {
+			const response = await apis.identity();
+			console.log(response);
+			if (response.isLoggedIn) {
+				throw redirect({ to: "/url" });
+			}
+		} catch (error) {
+			console.log(error);
 		}
 	},
 });
