@@ -47,7 +47,7 @@ function App() {
 	useEffect(() => {
 		// Initialize vConsole (only in development or on mobile)
 		// if (process.env.NODE_ENV === "development") {
-		const vConsole = new VConsole();
+		new VConsole();
 		// console.log("vConsole is active!");
 		// }
 	}, []);
