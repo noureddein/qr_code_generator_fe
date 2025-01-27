@@ -1,6 +1,9 @@
 import { User } from "@src/types.d";
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import {
+	persist,
+	// createJSONStorage
+} from "zustand/middleware";
 interface StoreState {
 	user: User | null; // Replace `User` with your user type
 	accessToken: string | null;
@@ -43,7 +46,7 @@ const useAuth = create<StoreState>()(
 		}),
 		{
 			name: "auth-storage", // Name of the storage key
-			storage: createJSONStorage(() => sessionStorage), // Use sessionStorage
+			// storage: createJSONStorage(() => sessionStorage), // Use sessionStorage
 		}
 	)
 );

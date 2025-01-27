@@ -1,4 +1,5 @@
 import { UseAPIs } from "@hooks/useAPIs";
+import useAuth from "@store/authStore";
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 // import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import * as React from "react";
@@ -25,9 +26,11 @@ const TanStackRouterDevtools =
 				}))
 			);
 
-console.log({ ENV: import.meta.env.VITE_NODE_ENV });
+// console.log({ ENV: import.meta.env.VITE_NODE_ENV });
 
 function RootComponent() {
+	const user = useAuth((s) => s.user);
+	console.log({ user });
 	return (
 		<React.Fragment>
 			<Outlet />
